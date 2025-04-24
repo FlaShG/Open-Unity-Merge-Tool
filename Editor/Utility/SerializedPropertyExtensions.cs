@@ -1,4 +1,4 @@
-﻿namespace ThirteenPixels.OpenUnityMergeTool
+namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor;
 
@@ -6,6 +6,21 @@
     {
         public static object GetValue(this SerializedProperty property)
         {
+            if (property.IsRealArray())
+            {
+                property = property.Copy();
+                property.Next(true);
+                var array = new object[property.arraySize];
+                property.Next(true);
+                for (var i = 0; i < array.Length; i++)
+                {
+                    property.Next(false);
+                    array[i] = property.GetValue();
+                }
+                property.Dispose();
+                return array;
+            }
+
             try
             {
                 return property.boxedValue;
@@ -18,7 +33,23 @@
 
         public static void SetValue(this SerializedProperty property, object value)
         {
-            property.boxedValue = value;
+            if (property.IsRealArray() && value is object[] array)
+            {
+                property = property.Copy();
+                property.Next(true);
+                property.arraySize = array.Length;
+                property.Next(true);
+                for (var i = 0; i < array.Length; i++)
+                {
+                    property.Next(false);
+                    property.SetValue(array[i]);
+                }
+                property.Dispose();
+            }
+            else
+            {
+                property.boxedValue = value;
+            }
             property.serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 

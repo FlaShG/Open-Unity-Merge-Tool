@@ -126,7 +126,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                         mergeAction.AddProperty(ourProperty.Copy(), theirProperty.Copy());
                     }
 
-                    shouldEnterChildren = ourProperty.hasVisibleChildren;
+                    shouldEnterChildren = ShouldEnterChildren(ourProperty);
                 }
             }
             
@@ -196,6 +196,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             return !Equals(our, their);
+        }
+
+        private bool ShouldEnterChildren(SerializedProperty serializedProperty)
+        {
+            return serializedProperty.propertyType == SerializedPropertyType.Generic &&
+                serializedProperty.hasVisibleChildren &&
+                serializedProperty.isExpanded;
         }
     }
 }
