@@ -58,6 +58,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public override void Cancel()
         {
             Cleanup();
+            EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         }
 
         public override void Finish()
@@ -65,6 +66,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             Cleanup();
             EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
             MergeTool.Vcs.MarkAsMerged(path);
+            EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         }
 
         private void Cleanup()
