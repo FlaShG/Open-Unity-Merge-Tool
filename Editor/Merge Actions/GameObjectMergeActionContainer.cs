@@ -94,6 +94,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void FindPropertyDifferences(UnityObject ours, UnityObject theirs)
         {
+            if (ours.GetType() != theirs.GetType())
+            {
+                throw new System.InvalidOperationException($"The two objects must be of the same type, but are {ours.GetType().Name} and {theirs.GetType().Name}.");
+            }
+
             MergeActionPropertyValues mergeAction = null;
 
             var ourSerializedObject = new SerializedObject(ours);
