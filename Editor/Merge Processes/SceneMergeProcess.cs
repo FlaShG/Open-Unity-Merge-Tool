@@ -55,13 +55,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             return mergeActions;
         }
 
-        public override void Cancel()
+        protected override void CancelProcess()
         {
             Cleanup();
             EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         }
 
-        public override void Finish()
+        protected override void FinishProcess()
         {
             Cleanup();
             EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());

@@ -19,27 +19,27 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public readonly ReadOnlyCollection<MergeAction> MergeActions;
         public bool HasActions => mergeActions.Count > 0;
 
-        public GameObjectMergeActionContainer(GameObject ours, GameObject theirs)
+        public GameObjectMergeActionContainer(GameObject ourGameObject, GameObject theirGameObject)
         {
-            ourGameObject = ours;
-            theirGameObject = theirs;
+            this.ourGameObject = ourGameObject;
+            this.theirGameObject = theirGameObject;
 
             mergeActions = new();
             MergeActions = mergeActions.AsReadOnly();
 
-            if (ours && !theirs)
+            if (ourGameObject && !theirGameObject)
             {
-                Name = ours.GetPath();
-                mergeActions.Add(new MergeActionOurGameObject(ours));
+                Name = ourGameObject.GetPath();
+                mergeActions.Add(new MergeActionOurGameObject(ourGameObject));
             }
-            else if (theirs && !ours)
+            else if (theirGameObject && !ourGameObject)
             {
-                Name = theirs.GetPath();
-                mergeActions.Add(new MergeActionTheirGameObject(theirs));
+                Name = theirGameObject.GetPath();
+                mergeActions.Add(new MergeActionTheirGameObject(theirGameObject));
             }
             else
             {
-                Name = ours.GetPath();
+                Name = ourGameObject.GetPath();
                 FindComponentDifferences();
                 FindGameObjectPropertyDifferences();
             }
@@ -51,15 +51,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             var ourComponents = ourGameObject.GetComponents<Component>();
 
-            theirGameObject.SetActiveForMerging(true);
             var theirComponents = new Dictionary<ObjectId, Component>();
             foreach (var component in theirGameObject.GetComponents<Component>())
             {
                 if (component == null) continue;
 
+                var id = ObjectId.GetFor(component);
                 theirComponents.Add(ObjectId.GetFor(component), component);
             }
-            theirGameObject.SetActiveForMerging(false);
 
             foreach (var ourComponent in ourComponents)
             {
@@ -68,6 +67,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var id = ObjectId.GetFor(ourComponent);
                 if (theirComponents.TryGetValue(id, out var theirComponent))
                 {
+                    var id2 = ObjectId.GetFor(theirComponent);
                     // Component exists in both versions.
                     FindPropertyDifferences(ourComponent, theirComponent);
                     theirComponents.Remove(id);
@@ -96,7 +96,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             if (ours.GetType() != theirs.GetType())
             {
-                throw new System.InvalidOperationException($"The two objects must be of the same type, but are {ours.GetType().Name} and {theirs.GetType().Name}.");
+                throw new System.ArgumentException($"The two objects must be of the same type, but are {ours.GetType().Name} and {theirs.GetType().Name}.");
             }
 
             MergeActionPropertyValues mergeAction = null;
@@ -116,8 +116,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 {
                     theirProperty.NextVisible(shouldEnterChildren);
 
-                    // TODO Ignore prefab name when merging a prefab
-
                     if (DifferentValues(ourProperty, theirProperty))
                     {
                         if (mergeAction == null)
@@ -127,6 +125,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                         mergeAction.AddProperty(ourProperty.Copy(), theirProperty.Copy());
                     }
+
+                    shouldEnterChildren = ourProperty.hasVisibleChildren;
                 }
             }
             

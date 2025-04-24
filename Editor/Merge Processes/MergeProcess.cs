@@ -39,10 +39,23 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        public abstract void Finish();
+        public void Finish()
+        {
+            FinishProcess();
+            gameObjectDictionary.Dispose();
+        }
 
-        public abstract void Cancel();
+        public void Cancel()
+        {
+            CancelProcess();
+            gameObjectDictionary.Dispose();
+        }
 
         protected abstract List<GameObjectMergeActionContainer> StartProcess();
+
+        protected abstract void FinishProcess();
+
+        protected abstract void CancelProcess();
+
     }
 }

@@ -41,8 +41,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             else if (FileUtility.IsPrefab(path))
             {
-                throw new NotImplementedException();
-                //currentMergeProcess = new PrefabMergeProcess(path);
+                CurrentMergeProcess = new PrefabMergeProcess(path);
             }
 
             try
