@@ -1,16 +1,18 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor;
-    using UnityObject = UnityEngine.Object;
     using System;
+    using UnityObject = UnityEngine.Object;
 
     internal readonly struct ObjectId
     {
+        public readonly Type type;
         public readonly ulong id;
         public readonly ulong prefabId;
 
-        private ObjectId(ulong id, ulong prefabId)
+        private ObjectId(Type type, ulong id, ulong prefabId)
         {
+            this.type = type;
             this.id = id;
             this.prefabId = prefabId;
         }
@@ -19,7 +21,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             if (obj is ObjectId other)
             {
-                return id == other.id && prefabId == other.prefabId;
+                return type == other.type &&
+                    id == other.id &&
+                    prefabId == other.prefabId;
             }
 
             return false;
@@ -27,7 +31,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(id, prefabId);
+            return HashCode.Combine(type, id, prefabId);
         }
 
         public override string ToString()
@@ -37,11 +41,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static ObjectId GetFor(UnityObject obj)
         {
+            var type = obj.GetType();
             var goid = GlobalObjectId.GetGlobalObjectIdSlow(obj);
             var id = goid.targetObjectId;
             var prefabId = goid.targetPrefabId;
 
-            return new ObjectId(id, prefabId);
+            return new ObjectId(type, id, prefabId);
         }
     }
 }
