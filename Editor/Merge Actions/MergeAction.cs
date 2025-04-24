@@ -33,6 +33,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 ApplyOurs();
                 HighlightTarget();
+                EditorRepainter.RepaintInspector();
             }
             catch
             {
@@ -48,6 +49,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 ApplyTheirs();
                 HighlightTarget();
+                EditorRepainter.RepaintInspector();
             }
             catch
             {
@@ -60,6 +62,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public void AcceptNewValue()
         {
             State = Resolution.UsingNew;
+            EditorRepainter.RepaintInspector();
         }
 
         public void HighlightTarget()

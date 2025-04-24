@@ -53,6 +53,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 }
                 SerializedProperty.SetValue(OurValue);
                 State = Resolution.UsingOurs;
+                EditorRepainter.RepaintInspector();
             }
 
             public void UseTheirs()
@@ -67,6 +68,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 }
                 SerializedProperty.SetValue(TheirValue);
                 State = Resolution.UsingTheirs;
+                EditorRepainter.RepaintInspector();
             }
 
             public void AcceptNewValue()
