@@ -4,10 +4,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal class ConflictsTab : MergeToolTab
     {
-        public ConflictsTab()
+        public ConflictsTab(VisualElement content) : base(content)
         {
             label = "Conflicts";
-            EnableAutoRefresh();
         }
 
         protected override void BuildUI()
@@ -30,18 +29,18 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 if (firstResult)
                 {
                     firstResult = false;
-                    Add(new Label("Detected unresolved merge conflicts:"));
+                    root.Add(new Label("Detected unresolved merge conflicts:"));
                 }
 
                 var button = new Button();
                 button.text = path;
                 button.clicked += () => MergeTool.StartMergeProcess(path);
-                Add(button);
+                root.Add(button);
             }
 
             if (firstResult)
             {
-                Add(new Label("No merge conflicts detected."));
+                root.Add(new Label("No merge conflicts detected."));
             }
         }
     }

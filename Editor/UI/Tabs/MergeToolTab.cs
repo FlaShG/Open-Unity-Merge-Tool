@@ -1,55 +1,36 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEngine.UIElements;
-    using UnityEditor;
 
     internal abstract class MergeToolTab : Tab
     {
-        private readonly VisualElement root;
+        protected VisualElement root;
 
-        public MergeToolTab()
+        public MergeToolTab(VisualElement content)
         {
-            root = new Margin(10, 5, 5);
-            base.Add(root);
-            BuildUI();
+            root = content;
+            closing += OnClose;
+            selected += OnSelect;
         }
 
         protected abstract void BuildUI();
 
-        public new void Add(VisualElement element)
-        {
-            root.Add(element);
-        }
-
-        public new void Remove(VisualElement element)
-        {
-            root.Remove(element);
-        }
-
-        public new void Clear()
-        {
-            root.Clear();
-        }
-
         public void Refresh()
         {
-            Clear();
+            //Clear();
+            root.Clear();
             BuildUI();
         }
 
-        /// <summary>
-        /// Enables automatic <see cref="Refresh"/> invocation when the tab is selected or the editor is focused while it is open.
-        /// </summary>
-        protected void EnableAutoRefresh()
+        private void OnSelect(Tab tab)
         {
-            selected += _ => Refresh();
-            EditorApplication.focusChanged += focus =>
-            {
-                if (focus && visible)
-                {
-                    Refresh();
-                }
-            };
+            Refresh();
+        }
+
+        private bool OnClose()
+        {
+            root.Clear();
+            return true;
         }
     }
 }

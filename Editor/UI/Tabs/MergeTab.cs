@@ -7,26 +7,31 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private Button cancelButton;
         private Button finishButton;
 
-        public MergeTab()
+        public MergeTab(VisualElement content) : base(content)
         {
             label = "Merge";
-            EnableAutoRefresh();
         }
 
         protected override void BuildUI()
         {
             if (MergeTool.CurrentMergeProcess == null)
             {
-                Add(new Label("No merge in progress. Start a merge from the conflicts tab."));
+                root.Add(new Label("No merge in progress. Start a merge from the conflicts tab."));
                 return;
             }
 
+            var scrollView = new ScrollView(ScrollViewMode.Vertical);
+            scrollView.style.flexGrow = 1;
+            scrollView.style.marginTop = 5;
+            scrollView.style.marginBottom = 5;
+            root.Add(scrollView);
+
             foreach (var container in MergeTool.CurrentMergeProcess.mergeActionContainers)
             {
-                Add(new Label(container.Name));
+                scrollView.Add(new Label(container.Name));
                 foreach (var mergeAction in container.MergeActions)
                 {
-                    Add(new MergeActionCard(mergeAction));
+                    scrollView.Add(new MergeActionCard(mergeAction));
                 }
             }
 
@@ -36,6 +41,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void CreateFinishCancelLine()
         {
             var line = new HorizontalLayout();
+            line.style.alignSelf = Align.FlexEnd;
+            line.style.flexShrink = 0;
+            line.style.height = 30;
             line.Add(new HorizontalSpacer());
 
             cancelButton = new Button();
@@ -50,7 +58,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             finishButton.clicked += MergeTool.FinishCurrentMergeProgress;
             line.Add(finishButton);
 
-            Add(line);
+            root.Add(line);
         }
     }
 }
