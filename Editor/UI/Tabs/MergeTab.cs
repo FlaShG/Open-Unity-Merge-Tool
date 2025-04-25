@@ -98,12 +98,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var cancelButton = new Button(MergeTool.CancelCurrentMergeProgress);
             cancelButton.text = "Cancel merge";
-            //cancelButton.style.backgroundColor = StyleConstants.UnmergedColor;
+            cancelButton.SetButtonColor(StyleConstants.UnmergedColor);
             line.Add(cancelButton);
 
             var finishButton = new Button(MergeTool.FinishCurrentMergeProgress);
             finishButton.text = "Finish merge";
-            //finishButton.style.backgroundColor = StyleConstants.MergedColor;
+            finishButton.SetButtonColor(StyleConstants.MergedColor);
             line.Add(finishButton);
 
             root.Add(line);

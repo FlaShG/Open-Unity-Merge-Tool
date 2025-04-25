@@ -43,5 +43,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.borderLeftWidth = width;
             style.borderRightWidth = width;
         }
+
+        public static void SetButtonColor(this Button button, Color color)
+        {
+            button.style.backgroundColor = color;
+            button.RegisterCallback<MouseOverEvent>(_ =>
+            {
+                Color.RGBToHSV(color, out var h, out var s, out var v);
+                button.style.backgroundColor = Color.HSVToRGB(h, s, Mathf.Lerp(v, 1f, 0.2f));
+            });
+            button.RegisterCallback<MouseOutEvent>(_ =>
+            {
+                button.style.backgroundColor = color;
+            });
+        }
     }
 }
