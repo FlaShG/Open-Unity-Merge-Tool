@@ -14,6 +14,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public readonly string Name;
         public readonly ReadOnlyCollection<MergeAction> MergeActions;
         public bool HasActions => mergeActions.Count > 0;
+        //public bool HasIncompleteActions => mergeActions.Any(action => action.State == MergeAction.Resolution.Open);
         public GameObject TargetGameObject => ourGameObject;
 
         private readonly GameObject ourGameObject;

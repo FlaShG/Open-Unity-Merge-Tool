@@ -3,17 +3,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using System.Collections.ObjectModel;
     using UnityEditor;
 
-    // TODO should this just produce a VisualElement instead?
     internal abstract class MergeAction : IMergeable
     {
         internal enum Resolution
         {
-            Open, UsingOurs, UsingTheirs, UsingNew
+            Incomplete, AutoCompleted, Complete
         }
 
         public abstract string Title { get; }
         public virtual Resolution State { get; private set; }
-        public bool IsMerged => State != Resolution.Open;
 
         public virtual ReadOnlyCollection<IMergeable> Children => null;
         public SerializedProperty SerializedProperty => null;
@@ -29,14 +27,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyOurs();
+                State = Resolution.Complete;
                 EditorRepainter.RepaintInspector();
             }
             catch
             {
                 return;
             }
-
-            State = Resolution.UsingOurs;
         }
 
         public void UseTheirs()
@@ -44,19 +41,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyTheirs();
+                State = Resolution.Complete;
                 EditorRepainter.RepaintInspector();
             }
             catch
             {
                 return;
             }
-
-            State = Resolution.UsingTheirs;
         }
 
         public void AcceptNewValue()
         {
-            State = Resolution.UsingNew;
             EditorRepainter.RepaintInspector();
         }
 

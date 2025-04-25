@@ -3,7 +3,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEditor;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
     using UnityObject = UnityEngine.Object;
 
     /// <summary>
@@ -17,7 +16,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public string ApplyOursButtonLabel => "Apply ours";
             public string ApplyTheirsButtonLabel => "Apply theirs";
 
-            public Resolution State { get; private set; } = Resolution.Open;
+            public Resolution State { get; private set; } = Resolution.Incomplete;
 
             public SerializedProperty SerializedProperty { get; }
             public object OurValue { get; }
@@ -51,7 +50,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     SerializedProperty.SetPrefabOverride(true);
                 }
                 SerializedProperty.SetValue(OurValue);
-                State = Resolution.UsingOurs;
+                State = Resolution.Complete;
                 EditorRepainter.RepaintInspector();
             }
 
@@ -66,13 +65,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     SerializedProperty.SetPrefabOverride(true);
                 }
                 SerializedProperty.SetValue(TheirValue);
-                State = Resolution.UsingTheirs;
+                State = Resolution.Complete;
                 EditorRepainter.RepaintInspector();
             }
 
             public void AcceptNewValue()
             {
-                State = Resolution.UsingNew;
+                State = Resolution.Complete;
             }
 
             ~Property()
@@ -89,16 +88,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             get
             {
-                if (properties.Any(p => p.State == Resolution.Open))
+                var hasAutocomplete = false;
+                foreach (var property in properties)
                 {
-                    return Resolution.Open;
+                    switch (property.State)
+                    {
+                        case Resolution.Incomplete:
+                            return Resolution.Incomplete;
+                        case Resolution.AutoCompleted:
+                            hasAutocomplete = true;
+                            break;
+                    }
                 }
-                var firstState = properties[0].State;
-                if (properties.All(p => p.State == firstState))
-                {
-                    return firstState;
-                }
-                return Resolution.UsingNew;
+                return hasAutocomplete ? Resolution.AutoCompleted : Resolution.Complete;
             }
         }
 

@@ -52,7 +52,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public void Refresh()
         {
-            background.style.backgroundColor = mergeAction.IsMerged ? StyleConstants.MergedColor : StyleConstants.UnmergedColor;
+            background.style.backgroundColor = StyleConstants.GetColorFor(mergeAction.State);
             topLine.Update();
 
             if (childrenLines != null)
