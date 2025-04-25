@@ -11,11 +11,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
         /// Activates/deactivates the GameObjct, and hides it when it is disabled.
         /// This is used for "their" objects to hide them while merging.
         /// </summary>
-        /// <param name="gameObject">The object do enable/disable</param>
-        /// <param name="active">Enable or disable the object?</param>
-        public static void SetActiveForMerging(this GameObject gameObject, bool active)
+        /// <param name="gameObject">The object do activate/deactivate.</param>
+        /// <param name="active">Activate or deactivate the object?</param>
+        /// <param name="realActive">Set to <c>false</c> while activating to activate it with <c>activeSelf</c> set to false.</param>
+        public static void SetActiveForMerging(this GameObject gameObject, bool active, bool realActive = true)
         {
-            gameObject.SetActive(active);
+            gameObject.SetActive(active && realActive);
             gameObject.hideFlags = active ? HideFlags.None : HideFlags.HideAndDontSave;
         }
 
