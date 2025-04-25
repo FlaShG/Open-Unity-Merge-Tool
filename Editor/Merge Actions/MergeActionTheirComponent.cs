@@ -8,7 +8,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionTheirComponent : MergeActionComponent
     {
-        public override string Title => $"Their {componentType.Name} component";
+        public override string Title => $"A {componentType.Name} component has been added on their branch.";
         public override string ApplyOursButtonLabel => "Ignore";
         public override string ApplyTheirsButtonLabel => "Add";
 
