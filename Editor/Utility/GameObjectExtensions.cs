@@ -63,7 +63,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             if (view)
             {
                 view.in2DMode = gameObject.GetComponent<RectTransform>() || EditorIsIn2dMode();
-                view.FrameSelected();
+                EditorApplication.delayCall += () => view.FrameSelected();
             }
         }
 
