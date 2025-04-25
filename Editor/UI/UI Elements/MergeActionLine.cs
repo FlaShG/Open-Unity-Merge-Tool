@@ -109,6 +109,25 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void Refresh()
         {
             parentCard.Refresh();
+            if (mergeable.DecisionState != DecisionState.Incomplete)
+            {
+                if (mergeable.IsUsingOurs)
+                {
+                    applyOursButton.SetButtonColor(StyleConstants.MergedColor);
+                }
+                else
+                {
+                    applyOursButton.ResetButtonColor();
+                }
+                if (mergeable.IsUsingTheirs)
+                {
+                    applyTheirsButton.SetButtonColor(StyleConstants.MergedColor);
+                }
+                else
+                {
+                    applyTheirsButton.ResetButtonColor();
+                }
+            }
         }
 
         public void Update()

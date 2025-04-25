@@ -15,6 +15,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
         object OurValue { get; }
         object TheirValue { get; }
 
+        bool IsUsingOurs { get; }
+        bool IsUsingTheirs { get; }
+
         bool OurValueIsPrefabDefault { get; }
         bool TheirValueIsPrefabDefault { get; }
 

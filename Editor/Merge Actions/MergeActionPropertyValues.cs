@@ -4,6 +4,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using UnityObject = UnityEngine.Object;
+    using System.Linq;
 
     /// <summary>
     /// A <see cref="MergeAction"/> that represents all differences in the properties of a single <see cref="UnityObject"/>.
@@ -21,6 +22,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public SerializedProperty SerializedProperty { get; }
             public object OurValue { get; }
             public object TheirValue { get; }
+            public bool IsUsingOurs => SerializedProperty.HasValue(OurValue);
+            public bool IsUsingTheirs => SerializedProperty.HasValue(TheirValue);
             public bool OurValueIsPrefabDefault { get; }
             public bool TheirValueIsPrefabDefault { get; }
             private bool ourValueIsPrefabOverride { get; }
@@ -83,6 +86,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public override string Title => target.GetType().Name;
         public override string ApplyOursButtonLabel => "Apply all ours";
         public override string ApplyTheirsButtonLabel => "Apply all theirs";
+        public override bool IsUsingOurs => properties.All(p => p.IsUsingOurs);
+        public override bool IsUsingTheirs => properties.All(p => p.IsUsingTheirs);
 
         public override DecisionState DecisionState
         {

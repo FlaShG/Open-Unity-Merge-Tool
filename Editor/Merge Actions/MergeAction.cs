@@ -14,6 +14,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public virtual string ApplyTheirsButtonLabel => "<<<";
         public object OurValue => null;
         public object TheirValue => null;
+        public abstract bool IsUsingOurs { get; }
+        public abstract bool IsUsingTheirs { get; }
         public virtual bool OurValueIsPrefabDefault => false;
         public virtual bool TheirValueIsPrefabDefault => false;
 

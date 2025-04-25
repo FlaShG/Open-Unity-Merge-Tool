@@ -8,9 +8,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionTheirComponent : MergeActionComponent
     {
-        public override string Title => $"A {componentType.Name} component has been added on their branch.";
+        public override string Title => $"A <b>{componentType.Name}</b> component has been added on their branch.";
         public override string ApplyOursButtonLabel => "Ignore";
         public override string ApplyTheirsButtonLabel => "Add";
+        public override bool IsUsingOurs => !componentStays;
 
         public MergeActionTheirComponent(GameObject target, Component component)
             : base(target, component)

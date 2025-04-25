@@ -6,27 +6,26 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// A <see cref="MergeAction"/> that decides between a <see cref="GameObject"/>
     /// that exists on <c>their</c> branch but not on <c>our</c>s.
     /// </summary>
-    internal class MergeActionTheirGameObject : MergeAction
+    internal class MergeActionTheirGameObject : MergeActionGameObject
     {
         public override string Title => $"This GameObject has been <b>added</b> on their branch.";
         public override string ApplyOursButtonLabel => "Remove";
         public override string ApplyTheirsButtonLabel => "Add";
+        public override bool IsUsingOurs => !gameObjectStays;
 
-        private readonly GameObject gameObject;
 
-        public MergeActionTheirGameObject(GameObject gameObject)
+        public MergeActionTheirGameObject(GameObject gameObject) : base(gameObject)
         {
-            this.gameObject = gameObject;
         }
 
         protected override void ApplyOurs()
         {
-            gameObject.SetActiveForMerging(false);
+            RemoveGameObject();
         }
 
         protected override void ApplyTheirs()
         {
-            gameObject.SetActiveForMerging(true);
+            LetGameObjectExist();
         }
     }
 }

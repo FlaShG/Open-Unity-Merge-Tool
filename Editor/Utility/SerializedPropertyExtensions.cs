@@ -31,6 +31,24 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        public static bool HasValue(this SerializedProperty property, object value)
+        {
+            if (property.IsRealArray() && value is object[] array)
+            {
+                // TODO Compare array size, then iterate over all elements and call HasValue on each.
+                return false;
+            }
+
+            try
+            {
+                return property.boxedValue == value;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void SetValue(this SerializedProperty property, object value)
         {
             if (property.IsRealArray() && value is object[] array)
