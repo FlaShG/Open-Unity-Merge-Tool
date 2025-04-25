@@ -25,6 +25,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var button = new Button();
             button.style.flexGrow = 1;
             button.text = VersionControlSystem.GetTitle(MergeTool.Vcs);
+            button.enabledSelf = MergeTool.CurrentMergeProcess == null;
 
             var dropdown = new GenericDropdownMenu();
             var availableSystems = TypeCache.GetTypesDerivedFrom<VersionControlSystem>();

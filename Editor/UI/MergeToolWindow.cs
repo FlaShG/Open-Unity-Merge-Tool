@@ -59,23 +59,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void RefreshUI()
         {
-            int tabIndex;
+            setupTab.Refresh();
+
             if (MergeTool.Vcs == null)
             {
-                tabIndex = 0;
-                setupTab.Refresh();
+                tabView.selectedTabIndex = 0;
             }
             else if (MergeTool.CurrentMergeProcess == null)
             {
-                tabIndex = 1;
+                tabView.selectedTabIndex = 1;
                 conflictsTab.Refresh();
             }
             else
             {
-                tabIndex = 2;
+                tabView.selectedTabIndex = 2;
                 mergeTab.Refresh();
             }
-            tabView.selectedTabIndex = tabIndex;
         }
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
