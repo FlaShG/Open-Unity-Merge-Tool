@@ -4,16 +4,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal abstract class MergeActionComponent : MergeAction
     {
-        protected override GameObject highlightTarget => target;
-        private readonly GameObject target;
         private readonly Component component;
 
         protected System.Type componentType => component.GetType();
 
         public MergeActionComponent(GameObject target, Component component)
         {
-            this.target = target;
-
             if (component.gameObject != target)
             {
                 component = target.AddComponent(component);

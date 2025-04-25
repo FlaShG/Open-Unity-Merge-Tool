@@ -1,6 +1,5 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
-    using UnityEngine;
     using System.Collections.ObjectModel;
     using UnityEditor;
 
@@ -18,8 +17,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public virtual ReadOnlyCollection<IMergeable> Children => null;
         public SerializedProperty SerializedProperty => null;
-
-        protected abstract GameObject highlightTarget { get; }
         public virtual string ApplyOursButtonLabel => ">>>";
         public virtual string ApplyTheirsButtonLabel => "<<<";
         public object OurValue => null;
@@ -32,7 +29,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyOurs();
-                HighlightTarget();
                 EditorRepainter.RepaintInspector();
             }
             catch
@@ -48,7 +44,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyTheirs();
-                HighlightTarget();
                 EditorRepainter.RepaintInspector();
             }
             catch
@@ -63,11 +58,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             State = Resolution.UsingNew;
             EditorRepainter.RepaintInspector();
-        }
-
-        public void HighlightTarget()
-        {
-            highlightTarget.Highlight();
         }
 
         protected abstract void ApplyOurs();

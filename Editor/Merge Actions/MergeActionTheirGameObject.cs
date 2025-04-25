@@ -8,11 +8,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionTheirGameObject : MergeAction
     {
-        public override string Title => $"Their new GameObject";
+        public override string Title => $"This GameObject has been <b>added</b> on their branch.";
         public override string ApplyOursButtonLabel => "Remove";
         public override string ApplyTheirsButtonLabel => "Add";
 
-        protected override GameObject highlightTarget => gameObject;
         private readonly GameObject gameObject;
 
         public MergeActionTheirGameObject(GameObject gameObject)

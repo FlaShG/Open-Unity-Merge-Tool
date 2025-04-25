@@ -56,12 +56,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
         /// <param name="gameObject">The GameObject of interest</param>
         public static void Highlight(this GameObject gameObject)
         {
-            // Focusing on the same object twice, zooms in to the coordinate instead of the bounding box.
-            if (Selection.activeObject == gameObject)
-            {
-                return;
-            }
-
             Selection.activeGameObject = gameObject;
             EditorGUIUtility.PingObject(gameObject);
 

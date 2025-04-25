@@ -51,6 +51,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectDictionary.Dispose();
         }
 
+        public override string ToString()
+        {
+            return $"{GetType().Name} ({path})";
+        }
+
         protected abstract List<GameObjectMergeActionContainer> StartProcess();
 
         protected abstract void FinishProcess();

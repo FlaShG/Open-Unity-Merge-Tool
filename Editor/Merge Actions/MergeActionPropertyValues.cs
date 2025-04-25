@@ -1,7 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor;
-    using UnityEngine;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
@@ -105,21 +104,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public override ReadOnlyCollection<IMergeable> Children { get; }
 
-        protected override GameObject highlightTarget { get; }
         private readonly UnityObject target;
         private readonly List<IMergeable> properties = new();
 
         public MergeActionPropertyValues(UnityObject target)
         {
             this.target = target;
-            if (target is GameObject targetGameObject)
-            {
-                highlightTarget = targetGameObject;
-            }
-            else if (target is Component targetComponent)
-            {
-                highlightTarget = targetComponent.gameObject;
-            }
             Children = properties.AsReadOnly();
         }
 

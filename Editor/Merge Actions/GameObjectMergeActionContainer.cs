@@ -12,12 +12,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
     internal class GameObjectMergeActionContainer
     {
         public readonly string Name;
+        public readonly ReadOnlyCollection<MergeAction> MergeActions;
+        public bool HasActions => mergeActions.Count > 0;
+        public GameObject TargetGameObject => ourGameObject;
+
         private readonly GameObject ourGameObject;
         private readonly GameObject theirGameObject;
         private readonly List<MergeAction> mergeActions;
 
-        public readonly ReadOnlyCollection<MergeAction> MergeActions;
-        public bool HasActions => mergeActions.Count > 0;
 
         public GameObjectMergeActionContainer(GameObject ourGameObject, GameObject theirGameObject)
         {

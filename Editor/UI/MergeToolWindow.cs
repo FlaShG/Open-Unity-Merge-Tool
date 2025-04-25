@@ -4,7 +4,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEngine.UIElements;
     using UnityEditor;
 
-    internal class MergeToolWindow : EditorWindow
+    internal class MergeToolWindow : EditorWindow, IHasCustomMenu
     {
         [MenuItem("Tools/Open Unity Merge Tool")]
         private static void OpenWindow()
@@ -28,6 +28,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var tabContent = new VisualElement();
             tabContent.style.flexGrow = 1;
+            tabContent.style.SetPadding(6, 4, 4, 2);
 
             tabView = new TabView();
             tabView.Add(setupTab = new SetupTab(tabContent));
@@ -75,6 +76,18 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 mergeTab.Refresh();
             }
             tabView.selectedTabIndex = tabIndex;
+        }
+
+        void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
+        {
+            menu.AddItem(new GUIContent("Debug Status"), false, ShowStatus);
+        }
+
+        private void ShowStatus()
+        {
+            EditorUtility.DisplayDialog("Merge Tool Debug Status",
+                $"Merge Process: {MergeTool.CurrentMergeProcess}",
+                "OK");
         }
     }
 }
