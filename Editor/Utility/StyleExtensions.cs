@@ -1,5 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.UIElements;
 
@@ -56,6 +57,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 button.style.backgroundColor = color;
             });
+        }
+
+        public static void EnableBackgroundTransitions(this IStyle style)
+        {
+            style.transitionProperty = new List<StylePropertyName> { "background-color" };
+            style.transitionDuration = new List<TimeValue> { StyleConstants.TransitionDuration };
+            style.transitionTimingFunction = new List<EasingFunction> { new EasingFunction(EasingMode.EaseOut) };
         }
     }
 }

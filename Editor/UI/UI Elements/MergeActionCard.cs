@@ -1,5 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEngine;
     using UnityEngine.UIElements;
     using System.Collections.Generic;
 
@@ -7,19 +8,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
     {
         private readonly MergeAction mergeAction;
         private readonly VisualElement background;
-        private readonly MergeableActionLine topLine;
-        private readonly List<MergeableActionLine> childrenLines;
+        private readonly MergeActionLine topLine;
+        private readonly List<MergeActionLine> childrenLines;
 
         public MergeActionCard(MergeAction mergeAction)
         {
             this.mergeAction = mergeAction;
             style.marginTop = 4;
             style.marginBottom = 4;
+            style.SetBorder(1f, new Color(0.2f, 0f, 0f));
 
             background = CreateBackground();
 
             var topLineHasButtons = mergeAction.Children == null || mergeAction.Children.Count > 1;
-            topLine = new MergeableActionLine(this, mergeAction, showButtons: topLineHasButtons);
+            topLine = new MergeActionLine(this, mergeAction, showButtons: topLineHasButtons);
             background.Add(topLine);
 
             if (mergeAction.Children != null)
@@ -30,7 +32,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 childrenLines = new();
                 foreach (var child in mergeAction.Children)
                 {
-                    var line = new MergeableActionLine(this, child);
+                    var line = new MergeActionLine(this, child);
                     childrenLines.Add(line);
                     innerBox.Add(line);
                 }
@@ -43,9 +45,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             var background = new Box();
             background.style.SetPadding(2, 4, 2, 2);
-            background.style.transitionProperty = new List<StylePropertyName> { "background-color" };
-            background.style.transitionDuration = new List<TimeValue> { StyleConstants.TransitionDuration };
-            background.style.transitionTimingFunction = new List<EasingFunction> { new EasingFunction(EasingMode.EaseOut) };
+            background.style.EnableBackgroundTransitions();
             Add(background);
             return background;
         }

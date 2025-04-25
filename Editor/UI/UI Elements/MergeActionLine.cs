@@ -3,7 +3,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEditor.UIElements;
     using UnityEngine.UIElements;
 
-    internal class MergeableActionLine : VisualElement
+    /// <summary>
+    /// UI representation of a single <see cref="IMergeable"/>.
+    /// </summary>
+    internal class MergeActionLine : VisualElement
     {
         private const int applyButtonWidth = 100;
 
@@ -14,12 +17,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private readonly Button applyOursButton;
         private readonly Button applyTheirsButton;
 
-        public MergeableActionLine(MergeActionCard parent, IMergeable mergeable, bool showButtons = true)
+        public MergeActionLine(MergeActionCard parent, IMergeable mergeable, bool showButtons = true)
         {
             parentCard = parent;
             this.mergeable = mergeable;
 
             line = new HorizontalLayout();
+            line.style.EnableBackgroundTransitions();
             Add(line);
 
             if (mergeable.SerializedProperty != null)
@@ -111,15 +115,5 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             line.style.backgroundColor = mergeable.State == MergeAction.Resolution.Open ? StyleConstants.UnmergedColor : StyleConstants.MergedColor;
         }
-
-        /*
-            // TODO Create a method that changes style to a backgroundColor and then fixes :hover and the others
-            applyOursButton.style.backgroundColor = mergeAction.State == MergeAction.Resolution.UsingOurs ?
-                StyleConstants.MergedColor :
-                StyleKeyword.Null;
-            applyTheirsButton.style.backgroundColor = mergeAction.State == MergeAction.Resolution.UsingTheirs ?
-                StyleConstants.MergedColor :
-                StyleKeyword.Null;
-         */
     }
 }

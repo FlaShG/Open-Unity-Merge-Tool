@@ -11,6 +11,5 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public static readonly Color PrefabColor = new Color(0f, 0f, 0.4f);
 
         public static readonly TimeValue TransitionDuration = new TimeValue(0.15f, TimeUnit.Second);
-
     }
 }
