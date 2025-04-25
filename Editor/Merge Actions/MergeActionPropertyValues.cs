@@ -16,7 +16,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public string ApplyOursButtonLabel => "Apply ours";
             public string ApplyTheirsButtonLabel => "Apply theirs";
 
-            public Resolution State { get; private set; } = Resolution.Incomplete;
+            public DecisionState DecisionState { get; private set; } = DecisionState.Incomplete;
 
             public SerializedProperty SerializedProperty { get; }
             public object OurValue { get; }
@@ -50,7 +50,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     SerializedProperty.SetPrefabOverride(true);
                 }
                 SerializedProperty.SetValue(OurValue);
-                State = Resolution.Complete;
+                DecisionState = DecisionState.Complete;
                 EditorRepainter.RepaintInspector();
             }
 
@@ -65,13 +65,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     SerializedProperty.SetPrefabOverride(true);
                 }
                 SerializedProperty.SetValue(TheirValue);
-                State = Resolution.Complete;
+                DecisionState = DecisionState.Complete;
                 EditorRepainter.RepaintInspector();
             }
 
             public void AcceptNewValue()
             {
-                State = Resolution.Complete;
+                DecisionState = DecisionState.Complete;
             }
 
             ~Property()
@@ -84,23 +84,23 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public override string ApplyOursButtonLabel => "Apply all ours";
         public override string ApplyTheirsButtonLabel => "Apply all theirs";
 
-        public override Resolution State
+        public override DecisionState DecisionState
         {
             get
             {
                 var hasAutocomplete = false;
                 foreach (var property in properties)
                 {
-                    switch (property.State)
+                    switch (property.DecisionState)
                     {
-                        case Resolution.Incomplete:
-                            return Resolution.Incomplete;
-                        case Resolution.AutoCompleted:
+                        case DecisionState.Incomplete:
+                            return DecisionState.Incomplete;
+                        case DecisionState.AutoCompleted:
                             hasAutocomplete = true;
                             break;
                     }
                 }
-                return hasAutocomplete ? Resolution.AutoCompleted : Resolution.Complete;
+                return hasAutocomplete ? DecisionState.AutoCompleted : DecisionState.Complete;
             }
         }
 

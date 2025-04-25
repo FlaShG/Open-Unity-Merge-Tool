@@ -5,13 +5,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal abstract class MergeAction : IMergeable
     {
-        internal enum Resolution
-        {
-            Incomplete, AutoCompleted, Complete
-        }
-
         public abstract string Title { get; }
-        public virtual Resolution State { get; private set; }
+        public virtual DecisionState DecisionState { get; private set; }
 
         public virtual ReadOnlyCollection<IMergeable> Children => null;
         public SerializedProperty SerializedProperty => null;
@@ -27,7 +22,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyOurs();
-                State = Resolution.Complete;
+                DecisionState = DecisionState.Complete;
                 EditorRepainter.RepaintInspector();
             }
             catch
@@ -41,7 +36,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 ApplyTheirs();
-                State = Resolution.Complete;
+                DecisionState = DecisionState.Complete;
                 EditorRepainter.RepaintInspector();
             }
             catch

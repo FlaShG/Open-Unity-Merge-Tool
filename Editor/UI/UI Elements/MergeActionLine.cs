@@ -113,7 +113,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public void Update()
         {
-            line.style.backgroundColor = StyleConstants.GetColorFor(mergeable.State);
+            line.style.backgroundColor = StyleConstants.GetColorFor(mergeable.DecisionState);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         string ApplyOursButtonLabel { get; }
         string ApplyTheirsButtonLabel { get; }
 
-        MergeAction.Resolution State { get; }
+        DecisionState DecisionState { get; }
 
         SerializedProperty SerializedProperty { get; }
         object OurValue { get; }
