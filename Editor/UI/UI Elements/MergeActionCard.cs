@@ -4,6 +4,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEngine.UIElements;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// UI represantation of a single component or GameObject.<br/>
+    /// Contains one or more <see cref="MergeActionLine"/>s that represent the conflicts with that object.
+    /// </summary>
     internal class MergeActionCard : VisualElement
     {
         private readonly MergeAction mergeAction;
