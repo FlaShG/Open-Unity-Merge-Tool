@@ -83,7 +83,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        public override string Title => target.GetType().Name;
+        public override string Title => $"<b>{target.GetType().Name}</b>";
         public override string ApplyOursButtonLabel => "Apply all ours";
         public override string ApplyTheirsButtonLabel => "Apply all theirs";
         public override bool IsUsingOurs => properties.All(p => p.IsUsingOurs);

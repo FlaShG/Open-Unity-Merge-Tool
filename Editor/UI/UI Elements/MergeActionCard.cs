@@ -20,8 +20,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             background = CreateBackground();
 
+            var topLineIsHeader = mergeAction.Children != null && mergeAction.Children.Count > 0;
             var topLineHasButtons = mergeAction.Children == null || mergeAction.Children.Count > 1;
-            topLine = new MergeActionLine(this, mergeAction, showButtons: topLineHasButtons);
+            topLine = new MergeActionLine(this, mergeAction,
+                isHeader: topLineIsHeader,
+                showButtons: topLineHasButtons);
             background.Add(topLine);
 
             if (mergeAction.Children != null)
@@ -53,13 +56,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public void Refresh()
         {
             background.style.backgroundColor = StyleConstants.GetColorFor(mergeAction.DecisionState);
-            topLine.Update();
+            topLine.Refresh();
 
             if (childrenLines != null)
             {
                 foreach (var line in childrenLines)
                 {
-                    line.Update();
+                    line.Refresh();
                 }
             }
         }

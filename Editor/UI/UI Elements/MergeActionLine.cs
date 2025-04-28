@@ -1,6 +1,7 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor.UIElements;
+    using UnityEngine;
     using UnityEngine.UIElements;
 
     /// <summary>
@@ -17,13 +18,24 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private readonly Button applyOursButton;
         private readonly Button applyTheirsButton;
 
-        public MergeActionLine(MergeActionCard parent, IMergeable mergeable, bool showButtons = true)
+        private readonly bool isHeader;
+
+        public MergeActionLine(MergeActionCard parent, IMergeable mergeable, bool isHeader = false, bool showButtons = true)
         {
             parentCard = parent;
             this.mergeable = mergeable;
 
+            this.isHeader = isHeader;
+
             line = new HorizontalLayout();
-            line.style.EnableBackgroundTransitions();
+            if (!isHeader)
+            {
+                line.style.EnableBackgroundTransitions();
+            }
+            else
+            {
+                line.style.backgroundColor = new Color(0f, 0f, 0f, 0.3f);
+            }
             Add(line);
 
             if (mergeable.SerializedProperty != null)
@@ -36,6 +48,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 propertyField.RegisterValueChangeCallback(evt =>
                 {
                     mergeable.AcceptNewValue();
+                    parentCard.Refresh();
                 });
                 */
                 propertyField.style.flexGrow = 1;
@@ -91,48 +104,49 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 line.Add(applyTheirsButton);
             }
 
-            Update();
+            Refresh();
         }
 
         private void UseOurs()
         {
             mergeable.UseOurs();
-            Refresh();
+            parentCard.Refresh();
         }
 
         private void UseTheirs()
         {
             mergeable.UseTheirs();
-            Refresh();
+            parentCard.Refresh();
         }
 
-        private void Refresh()
+        public void Refresh()
         {
-            parentCard.Refresh();
+            if (!isHeader)
+            {
+                line.style.backgroundColor = StyleConstants.GetColorFor(mergeable.DecisionState);
+            }
             if (mergeable.DecisionState != DecisionState.Incomplete)
             {
-                if (mergeable.IsUsingOurs)
+                if (applyOursButton != null && applyTheirsButton != null)
                 {
-                    applyOursButton.SetButtonColor(StyleConstants.MergedColor);
-                }
-                else
-                {
-                    applyOursButton.ResetButtonColor();
-                }
-                if (mergeable.IsUsingTheirs)
-                {
-                    applyTheirsButton.SetButtonColor(StyleConstants.MergedColor);
-                }
-                else
-                {
-                    applyTheirsButton.ResetButtonColor();
+                    if (mergeable.IsUsingOurs)
+                    {
+                        applyOursButton.SetButtonColor(StyleConstants.MergedColor);
+                    }
+                    else
+                    {
+                        applyOursButton.ResetButtonColor();
+                    }
+                    if (mergeable.IsUsingTheirs)
+                    {
+                        applyTheirsButton.SetButtonColor(StyleConstants.MergedColor);
+                    }
+                    else
+                    {
+                        applyTheirsButton.ResetButtonColor();
+                    }
                 }
             }
-        }
-
-        public void Update()
-        {
-            line.style.backgroundColor = StyleConstants.GetColorFor(mergeable.DecisionState);
         }
     }
 }
