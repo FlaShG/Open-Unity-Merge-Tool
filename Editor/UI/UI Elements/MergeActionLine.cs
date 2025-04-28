@@ -54,16 +54,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 var propertyField = new PropertyField(mergeable.SerializedProperty);
                 propertyField.Bind(mergeable.SerializedProperty.serializedObject);
-                propertyField.style.marginTop = 3;
-                // TODO Apparently not working for all types of values?
-                /*
-                propertyField.RegisterValueChangeCallback(evt =>
+                propertyField.TrackPropertyValue(mergeable.SerializedProperty, _ =>
                 {
                     mergeable.AcceptNewValue();
                     parentCard.Refresh();
                 });
-                */
                 propertyField.style.flexGrow = 1;
+                propertyField.style.marginTop = 3;
                 line.Add(propertyField);
             }
             else
