@@ -41,7 +41,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             try
             {
-                return property.boxedValue == value;
+                return Equals(property.boxedValue, value);
             }
             catch
             {
