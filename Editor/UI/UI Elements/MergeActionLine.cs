@@ -1,14 +1,19 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
-    using UnityEditor.UIElements;
     using UnityEngine;
     using UnityEngine.UIElements;
+    using UnityEditor.UIElements;
 
     /// <summary>
     /// UI representation of a single <see cref="IMergeable"/>.
     /// </summary>
     internal class MergeActionLine : VisualElement
     {
+        public enum Type
+        {
+            Header, SingleLine, Child
+        }
+
         private const int applyButtonWidth = 100;
 
         private readonly MergeActionCard parentCard;
@@ -18,23 +23,30 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private readonly Button applyOursButton;
         private readonly Button applyTheirsButton;
 
-        private readonly bool isHeader;
+        private readonly Type type;
 
-        public MergeActionLine(MergeActionCard parent, IMergeable mergeable, bool isHeader = false, bool showButtons = true)
+        public MergeActionLine(MergeActionCard parent, IMergeable mergeable, Type type, bool showButtons = true)
         {
             parentCard = parent;
             this.mergeable = mergeable;
+            this.type = type;
 
-            this.isHeader = isHeader;
+            style.height = 26;
 
             line = new HorizontalLayout();
-            if (!isHeader)
+            if (type == Type.Header)
             {
-                line.style.EnableBackgroundTransitions();
+                line.style.backgroundColor = new Color(0f, 0f, 0f, 0.3f);
+                line.style.height = 22;
+                line.style.SetPadding(3, 3, 4, 4);
             }
             else
             {
-                line.style.backgroundColor = new Color(0f, 0f, 0f, 0.3f);
+                if (type == Type.SingleLine)
+                {
+                    line.style.SetPadding(3, 3, 4, 4);
+                }
+                line.style.EnableBackgroundTransitions();
             }
             Add(line);
 
@@ -42,7 +54,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 var propertyField = new PropertyField(mergeable.SerializedProperty);
                 propertyField.Bind(mergeable.SerializedProperty.serializedObject);
-                propertyField.style.marginTop = 5;
+                propertyField.style.marginTop = 3;
                 // TODO Apparently not working for all types of values?
                 /*
                 propertyField.RegisterValueChangeCallback(evt =>
@@ -56,10 +68,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             else
             {
-                var titleLabel = new Label(mergeable.Title);
-                titleLabel.style.marginTop = 3;
-                titleLabel.style.marginLeft = 3;
+                if (mergeable.Title.image != null)
+                {
+                    var titleIcon = new Image();
+                    titleIcon.image = mergeable.Title.image;
+                    titleIcon.style.flexGrow = 0;
+                    titleIcon.style.flexShrink = 0;
+                    titleIcon.style.width = 16;
+                    titleIcon.style.height = 16;
+                    titleIcon.style.alignSelf = Align.Center;
+                    line.Add(titleIcon);
+                }
+
+                var titleLabel = new Label(mergeable.Title.text);
+                titleLabel.style.alignSelf = Align.Center;
                 line.Add(titleLabel);
+
                 line.Add(new HorizontalSpacer());
             }
 
@@ -102,6 +126,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 applyTheirsButton.style.width = applyButtonWidth;
                 applyTheirsButton.clicked += UseTheirs;
                 line.Add(applyTheirsButton);
+
+                if (type == Type.Header)
+                {
+                    applyOursButton.style.fontSize = 11;
+                    applyOursButton.style.SetMargin(0, 0, 3, 3);
+
+                    applyTheirsButton.style.fontSize = 11;
+                    applyTheirsButton.style.SetMargin(0, 0, 3, 3);
+                }
             }
 
             Refresh();
@@ -121,10 +154,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public void Refresh()
         {
-            if (!isHeader)
+            if (type != Type.Header)
             {
                 line.style.backgroundColor = StyleConstants.GetColorFor(mergeable.DecisionState);
             }
+
             if (mergeable.DecisionState != DecisionState.Incomplete)
             {
                 if (applyOursButton != null && applyTheirsButton != null)

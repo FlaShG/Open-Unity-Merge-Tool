@@ -59,6 +59,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.style.flexShrink = 0;
             line.style.height = 30;
 
+            var icon = new Image();
+            icon.image = StyleConstants.Icons.GameObject;
+            icon.style.width = 22;
+            icon.style.height = 22;
+            icon.style.marginTop = 4;
+            line.Add(icon);
+
             gameObjectButton = new Button(() => CurrentContainer.TargetGameObject.Highlight());
             line.Add(gameObjectButton);
 

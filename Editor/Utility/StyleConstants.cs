@@ -1,10 +1,16 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEditor;
     using UnityEngine;
     using UnityEngine.UIElements;
 
     internal static class StyleConstants
     {
+        public static class Icons
+        {
+            public static Texture GameObject => GetEditorIcon("GameObject Icon");
+        }
+
         public static readonly Color UnmergedColor = new Color(0.4f, 0.25f, 0.25f);
         public static readonly Color AutomergedColor = new Color(0.25f, 0.35f, 0.35f);
         public static readonly Color MergedColor = new Color(0.25f, 0.4f, 0.25f);
@@ -24,6 +30,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 default:
                     return UnmergedColor;
             }
+        }
+
+        private static Texture GetEditorIcon(string id)
+        {
+            return EditorGUIUtility.IconContent(id).image;
         }
     }
 }

@@ -1,5 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEditor;
     using UnityEngine;
 
     /// <summary>
@@ -8,7 +9,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionOurComponent : MergeActionComponent
     {
-        public override string Title => $"A <b>{componentType.Name}</b> component has been deleted on their branch.";
+        public override GUIContent Title => new ($"A <b>{componentType.Name}</b> has been deleted on their branch.", AssetPreview.GetMiniTypeThumbnail(componentType));
         public override string ApplyOursButtonLabel => "Keep";
         public override string ApplyTheirsButtonLabel => "Remove";
         public override bool IsUsingOurs => componentStays;

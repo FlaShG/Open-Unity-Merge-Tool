@@ -29,7 +29,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 var box = new Box();
                 box.style.backgroundColor = color;
-                box.style.SetMargin(4);
+                box.style.SetMargin(2, 2, 0, 0);
 
                 var label = new Label(ColorToHex(color));
                 label.style.color = IsBright(color) ? Color.black : Color.white;

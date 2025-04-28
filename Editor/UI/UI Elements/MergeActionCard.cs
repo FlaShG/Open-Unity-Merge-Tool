@@ -14,8 +14,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public MergeActionCard(MergeAction mergeAction)
         {
             this.mergeAction = mergeAction;
-            style.marginTop = 4;
-            style.marginBottom = 4;
+            style.marginTop = 2;
+            style.marginBottom = 2;
             style.SetBorder(1f, new Color(0.2f, 0f, 0f));
 
             background = CreateBackground();
@@ -23,19 +23,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var topLineIsHeader = mergeAction.Children != null && mergeAction.Children.Count > 0;
             var topLineHasButtons = mergeAction.Children == null || mergeAction.Children.Count > 1;
             topLine = new MergeActionLine(this, mergeAction,
-                isHeader: topLineIsHeader,
+                topLineIsHeader ? MergeActionLine.Type.Header : MergeActionLine.Type.SingleLine,
                 showButtons: topLineHasButtons);
             background.Add(topLine);
 
             if (mergeAction.Children != null)
             {
-                var innerBox = new Margin(10, 10, 10, 0);
+                var innerBox = new Margin(4, 4, 8, 0);
                 background.Add(innerBox);
 
                 childrenLines = new();
                 foreach (var child in mergeAction.Children)
                 {
-                    var line = new MergeActionLine(this, child);
+                    var line = new MergeActionLine(this, child, MergeActionLine.Type.Child);
                     childrenLines.Add(line);
                     innerBox.Add(line);
                 }

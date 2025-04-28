@@ -1,11 +1,12 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
-    using System.Collections.ObjectModel;
+    using UnityEngine;
     using UnityEditor;
+    using System.Collections.ObjectModel;
 
     internal abstract class MergeAction : IMergeable
     {
-        public abstract string Title { get; }
+        public abstract GUIContent Title { get; }
         public virtual DecisionState DecisionState { get; private set; }
 
         public virtual ReadOnlyCollection<IMergeable> Children => null;

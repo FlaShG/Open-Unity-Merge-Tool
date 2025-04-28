@@ -1,10 +1,11 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEngine;
     using UnityEditor;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using UnityObject = UnityEngine.Object;
     using System.Linq;
+    using UnityObject = UnityEngine.Object;
 
     /// <summary>
     /// A <see cref="MergeAction"/> that represents all differences in the properties of a single <see cref="UnityObject"/>.
@@ -13,7 +14,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     {
         public class Property : IMergeable
         {
-            public string Title => SerializedProperty.displayName;
+            public GUIContent Title => new(SerializedProperty.displayName);
             public string ApplyOursButtonLabel => "Apply ours";
             public string ApplyTheirsButtonLabel => "Apply theirs";
 
@@ -83,7 +84,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        public override string Title => $"<b>{target.GetType().Name}</b>";
+        public override GUIContent Title => new($"<b>{target.GetType().Name}</b>", AssetPreview.GetMiniTypeThumbnail(target.GetType()));
         public override string ApplyOursButtonLabel => "Apply all ours";
         public override string ApplyTheirsButtonLabel => "Apply all theirs";
         public override bool IsUsingOurs => properties.All(p => p.IsUsingOurs);

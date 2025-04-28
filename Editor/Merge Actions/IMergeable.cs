@@ -1,10 +1,11 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEngine;
     using UnityEditor;
 
     internal interface IMergeable
     {
-        string Title { get; }
+        GUIContent Title { get; }
 
         string ApplyOursButtonLabel { get; }
         string ApplyTheirsButtonLabel { get; }

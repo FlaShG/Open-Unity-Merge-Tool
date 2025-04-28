@@ -8,7 +8,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionOurGameObject : MergeActionGameObject
     {
-        public override string Title => $"This GameObject has been <b>deleted</b> on \"their\" branch.";
+        public override GUIContent Title => new($"This GameObject has been <b>deleted</b> on \"their\" branch.", StyleConstants.Icons.GameObject);
         public override string ApplyOursButtonLabel => "Keep";
         public override string ApplyTheirsButtonLabel => "Remove";
         public override bool IsUsingOurs => gameObjectStays;
