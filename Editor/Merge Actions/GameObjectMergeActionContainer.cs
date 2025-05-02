@@ -5,6 +5,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using UnityObject = UnityEngine.Object;
+    using System.Linq;
 
     /// <summary>
     /// A container that contains all available <see cref="MergeAction"/>s for one specific GameObject.
@@ -14,7 +15,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public readonly string Name;
         public readonly ReadOnlyCollection<MergeAction> MergeActions;
         public bool HasActions => mergeActions.Count > 0;
-        //public bool HasIncompleteActions => mergeActions.Any(action => action.State == MergeAction.Resolution.Open);
+        public bool IsCompleted => mergeActions.All(action => action.DecisionState == DecisionState.Complete);
+        public bool HasIncompleteActions => mergeActions.Any(action => action.DecisionState == DecisionState.Incomplete);
         public GameObject TargetGameObject => ourGameObject;
 
         private readonly GameObject ourGameObject;

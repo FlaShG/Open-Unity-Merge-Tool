@@ -2,6 +2,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor.SceneManagement;
     using System.Collections.Generic;
+    using System.Linq;
 
     internal abstract class MergeProcess
     {
@@ -14,7 +15,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         /// </summary>
         protected readonly string path;
 
-        internal List<GameObjectMergeActionContainer> mergeActionContainers { get; private set; }
+        public List<GameObjectMergeActionContainer> MergeActionContainers { get; private set; }
+        public int CompletedMergeActionContainerCount => MergeActionContainers.Where(container => container.IsCompleted).Count();
 
         protected MergeProcess(string path)
         {
@@ -26,14 +28,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var sceneHierarchyIsClean = EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             if (sceneHierarchyIsClean)
             {
-                mergeActionContainers = StartProcess();
+                MergeActionContainers = StartProcess();
             }
             else
             {
                 throw new MergeProcessException("Unsaved changes in an open scene.");
             }
 
-            if (mergeActionContainers == null)
+            if (MergeActionContainers == null)
             {
                 throw new MergeProcessException("Merge Actions were not generated.");
             }

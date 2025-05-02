@@ -24,6 +24,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public static MergeProcess CurrentMergeProcess { get; private set; }
 
         public static event Action OnMergeProcessChanged;
+        public static event Action OnMergeStateChanged;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -77,6 +78,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 CurrentMergeProcess = null;
                 OnMergeProcessChanged?.Invoke();
             }
+        }
+
+        public static void UpdateAfterMergeStateChange()
+        {
+            OnMergeStateChanged?.Invoke();
         }
 
         private static void OnSceneUnloaded(Scene scene)

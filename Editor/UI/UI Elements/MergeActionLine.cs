@@ -57,7 +57,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 propertyField.TrackPropertyValue(mergeable.SerializedProperty, _ =>
                 {
                     mergeable.AcceptNewValue();
-                    parentCard.Refresh();
+                    //parentCard.Refresh();
+                    MergeTool.UpdateAfterMergeStateChange();
                 });
                 propertyField.style.flexGrow = 1;
                 propertyField.style.marginTop = 3;
@@ -140,13 +141,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void UseOurs()
         {
             mergeable.UseOurs();
-            parentCard.Refresh();
+            //parentCard.Refresh();
+            MergeTool.UpdateAfterMergeStateChange();
         }
 
         private void UseTheirs()
         {
             mergeable.UseTheirs();
-            parentCard.Refresh();
+            //parentCard.Refresh();
+            MergeTool.UpdateAfterMergeStateChange();
         }
 
         public void Refresh()
