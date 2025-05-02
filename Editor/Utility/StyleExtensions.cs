@@ -60,27 +60,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.borderRightWidth = width;
         }
 
-        public static void SetButtonColor(this Button button, Color color)
-        {
-            button.style.backgroundColor = color;
-            // TODO This will create garbage over time :(
-            button.RegisterCallback<MouseOverEvent>(_ =>
-            {
-                Color.RGBToHSV(color, out var h, out var s, out var v);
-                button.style.backgroundColor = Color.HSVToRGB(h, s, Mathf.Lerp(v, 1f, 0.1f));
-            });
-            button.RegisterCallback<MouseOutEvent>(_ =>
-            {
-                button.style.backgroundColor = color;
-            });
-        }
-
-        public static void ResetButtonColor(this Button button)
-        {
-            button.style.backgroundColor = StyleKeyword.Null;
-            // TODO Reset hover color as well... would probably work best by adding and removing a uss class instead.
-        }
-
         public static void EnableBackgroundTransitions(this IStyle style)
         {
             style.transitionProperty = new List<StylePropertyName> { "background-color" };
