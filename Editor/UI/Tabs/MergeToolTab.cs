@@ -22,8 +22,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public void Select()
         {
-            contentParent.Clear();
-            contentParent.Add(root);
+            if (!contentParent.Contains(root))
+            {
+                contentParent.Clear();
+                contentParent.Add(root);
+            }
             UpdateContent();
         }
 

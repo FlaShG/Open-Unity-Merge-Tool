@@ -6,29 +6,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     internal class MergeTab : MergeToolTab
     {
         private int currentContainerIndex;
-        public int CurrentContainerIndex
-        {
-            get => currentContainerIndex;
-            set
-            {
-                currentContainerIndex = value;
-                ShowCurrentContainer();
-            }
-        }
-        public GameObjectMergeActionContainer CurrentContainer
-        {
-            get
-            {
-                try
-                {
-                    return MergeTool.CurrentMergeProcess.MergeActionContainers[CurrentContainerIndex];
-                }
-                catch
-                {
-                    return null;
-                }
-            }
-        }
+        private GameObjectMergeActionContainer currentContainer;
 
         private VisualElement mergeUI;
         private VisualElement multipleObjectsUI;
@@ -81,7 +59,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 finishButton.SetEnabled(completed == total);
 
-                ShowCurrentContainer();
+                if (currentContainer == null)
+                {
+                    currentContainerIndex = 0;
+                    ShowCurrentContainer();
+                }
             }
         }
 
@@ -98,7 +80,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             icon.style.marginTop = 4;
             line.Add(icon);
 
-            gameObjectButton = new Button(() => CurrentContainer.TargetGameObject.Highlight());
+            gameObjectButton = new Button(() => currentContainer.TargetGameObject.Highlight());
             line.Add(gameObjectButton);
 
             line.Add(new HorizontalSpacer());
@@ -151,25 +133,32 @@ namespace ThirteenPixels.OpenUnityMergeTool
             mergeUI.Add(line);
         }
 
-        private void ShowCurrentContainer()
+        private void ShowContainer(GameObjectMergeActionContainer container)
         {
-            gameObjectButton.text = CurrentContainer.TargetGameObject.name;
+            if (container == currentContainer) return;
+
+            currentContainer = container;
+            gameObjectButton.text = currentContainer.TargetGameObject.name;
             scrollView.Clear();
-            foreach (var mergeAction in CurrentContainer.MergeActions)
+            foreach (var mergeAction in currentContainer.MergeActions)
             {
                 scrollView.Add(new MergeActionCard(mergeAction));
             }
         }
 
+        private void ShowCurrentContainer()
+        {
+            ShowContainer(MergeTool.CurrentMergeProcess.MergeActionContainers[currentContainerIndex]);
+        }
+
         private void ShowNextContainer()
         {
-            var index = currentContainerIndex;
-            index++;
-            if (index >= MergeTool.CurrentMergeProcess.MergeActionContainers.Count)
+            currentContainerIndex++;
+            if (currentContainerIndex >= MergeTool.CurrentMergeProcess.MergeActionContainers.Count)
             {
-                index = 0;
+                currentContainerIndex = 0;
             }
-            CurrentContainerIndex = index;
+            ShowContainer(MergeTool.CurrentMergeProcess.MergeActionContainers[currentContainerIndex]);
         }
 
         private void CancelCurrentMergeProgress()

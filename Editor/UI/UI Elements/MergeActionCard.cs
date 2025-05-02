@@ -26,7 +26,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var topLineIsHeader = mergeAction.Children != null && mergeAction.Children.Count > 0;
             var topLineHasButtons = mergeAction.Children == null || mergeAction.Children.Count > 1;
-            topLine = new MergeActionLine(mergeAction,
+            topLine = new MergeActionLine(this, mergeAction,
                 topLineIsHeader ? MergeActionLine.Type.Header : MergeActionLine.Type.SingleLine,
                 showButtons: topLineHasButtons);
             background.Add(topLine);
@@ -39,7 +39,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 childrenLines = new();
                 foreach (var child in mergeAction.Children)
                 {
-                    var line = new MergeActionLine(child, MergeActionLine.Type.Child);
+                    var line = new MergeActionLine(this, child, MergeActionLine.Type.Child);
                     childrenLines.Add(line);
                     innerBox.Add(line);
                 }
