@@ -62,9 +62,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void RefreshUI()
         {
-            setupTab.UpdateContent();
-            mergeTab.UpdateContent();
-
             if (MergeTool.Vcs == null)
             {
                 tabView.selectedTabIndex = 0;
