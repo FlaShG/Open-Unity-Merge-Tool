@@ -118,6 +118,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             progressBar = new ProgressBar();
             progressBar.style.flexGrow = 1;
             progressBar.style.marginTop = 5;
+            progressBar.EnableProgressBarAnimation();
             multipleObjectsUI.Add(progressBar);
 
             var cancelButton = new Button(CancelCurrentMergeProgress);

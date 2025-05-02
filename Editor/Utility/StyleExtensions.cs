@@ -87,5 +87,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.transitionDuration = new List<TimeValue> { StyleConstants.TransitionDuration };
             style.transitionTimingFunction = new List<EasingFunction> { new EasingFunction(EasingMode.EaseOut) };
         }
+
+        public static void EnableProgressBarAnimation(this ProgressBar progressBar)
+        {
+            var element = progressBar.Q<VisualElement>(className: "unity-progress-bar__progress");
+            element.style.transitionProperty = new List<StylePropertyName> { "right" };
+            element.style.transitionDuration = new List<TimeValue> { StyleConstants.TransitionDuration };
+            element.style.transitionTimingFunction = new List<EasingFunction> { new EasingFunction(EasingMode.EaseOut) };
+        }
     }
 }
