@@ -4,33 +4,31 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal abstract class MergeToolTab : Tab
     {
-        protected VisualElement root;
+        protected readonly VisualElement root;
+        private readonly VisualElement contentParent;
 
-        public MergeToolTab(VisualElement content)
+        public MergeToolTab(VisualElement contentParent)
         {
-            root = content;
-            closing += OnClose;
-            selected += OnSelect;
+            this.contentParent = contentParent;
+            root = new VisualElement();
+            root.name = "Tab Root";
+            root.style.flexGrow = 1;
+
+            selected += _ => Select();
+
+            CreateGUI();
+            UpdateContent();
         }
 
-        protected abstract void BuildUI();
-
-        public void Refresh()
+        public void Select()
         {
-            //Clear();
-            root.Clear();
-            BuildUI();
+            contentParent.Clear();
+            contentParent.Add(root);
+            UpdateContent();
         }
 
-        private void OnSelect(Tab tab)
-        {
-            Refresh();
-        }
+        public abstract void UpdateContent();
 
-        private bool OnClose()
-        {
-            root.Clear();
-            return true;
-        }
+        protected abstract void CreateGUI();
     }
 }

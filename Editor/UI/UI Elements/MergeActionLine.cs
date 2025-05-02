@@ -55,7 +55,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 propertyField.TrackPropertyValue(mergeable.SerializedProperty, _ =>
                 {
                     mergeable.AcceptNewValue();
-                    MergeTool.UpdateAfterMergeStateChange();
+                    SendUpdateEvent();
                 });
                 propertyField.style.flexGrow = 1;
                 propertyField.style.marginTop = 3;
@@ -84,7 +84,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (showButtons)
             {
-                applyOursButton = new Button();
+                applyOursButton = new Button(UseOurs);
                 if (mergeable.OurValueIsPrefabDefault)
                 {
                     applyOursButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
@@ -100,10 +100,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     applyOursButton.text = mergeable.ApplyOursButtonLabel;
                 }
                 applyOursButton.style.width = applyButtonWidth;
-                applyOursButton.clicked += UseOurs;
                 line.Add(applyOursButton);
 
-                applyTheirsButton = new Button();
+                applyTheirsButton = new Button(UseTheirs);
                 if (mergeable.TheirValueIsPrefabDefault)
                 {
                     applyTheirsButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
@@ -119,7 +118,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     applyTheirsButton.text = mergeable.ApplyTheirsButtonLabel;
                 }
                 applyTheirsButton.style.width = applyButtonWidth;
-                applyTheirsButton.clicked += UseTheirs;
                 line.Add(applyTheirsButton);
 
                 if (type == Type.Header)
@@ -133,18 +131,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             Refresh();
-        }
-
-        private void UseOurs()
-        {
-            mergeable.UseOurs();
-            MergeTool.UpdateAfterMergeStateChange();
-        }
-
-        private void UseTheirs()
-        {
-            mergeable.UseTheirs();
-            MergeTool.UpdateAfterMergeStateChange();
         }
 
         public void Refresh()
@@ -176,6 +162,23 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     }
                 }
             }
+        }
+
+        private void UseOurs()
+        {
+            mergeable.UseOurs();
+            SendUpdateEvent();
+        }
+
+        private void UseTheirs()
+        {
+            mergeable.UseTheirs();
+            SendUpdateEvent();
+        }
+
+        private void SendUpdateEvent()
+        {
+            MergeTool.UpdateAfterMergeStateChange();
         }
     }
 }

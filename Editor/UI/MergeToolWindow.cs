@@ -27,6 +27,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             root.style.SetPadding(5);
 
             var tabContent = new VisualElement();
+            tabContent.name = "Tab Content";
             tabContent.style.flexGrow = 1;
             tabContent.style.SetPadding(6, 4, 4, 2);
 
@@ -61,21 +62,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void RefreshUI()
         {
-            setupTab.Refresh();
+            setupTab.UpdateContent();
 
             if (MergeTool.Vcs == null)
             {
                 tabView.selectedTabIndex = 0;
+                setupTab.Select();
             }
             else if (MergeTool.CurrentMergeProcess == null)
             {
                 tabView.selectedTabIndex = 1;
-                conflictsTab.Refresh();
+                conflictsTab.Select();
             }
             else
             {
                 tabView.selectedTabIndex = 2;
-                mergeTab.Refresh();
+                mergeTab.Select();
             }
         }
 

@@ -6,6 +6,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal static class StyleExtensions
     {
+        public static void Show(this IStyle style)
+        {
+            style.display = DisplayStyle.Flex;
+        }
+
+        public static void Hide(this IStyle style)
+        {
+            style.display = DisplayStyle.None;
+        }
+
+        public static void SetVisible(this IStyle style, bool visible)
+        {
+            style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
         public static void SetPadding(this IStyle style, float padding)
         {
             style.SetPadding(padding, padding, padding, padding);

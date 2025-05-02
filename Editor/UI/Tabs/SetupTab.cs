@@ -11,10 +11,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
             label = "Setup";
         }
 
-        protected override void BuildUI()
+        protected override void CreateGUI()
         {
             AddVCSDropdown();
             AddStatusLabel();
+        }
+
+        public override void UpdateContent()
+        {
+            
         }
 
         private void AddVCSDropdown()
@@ -36,8 +41,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     () =>
                     {
                         MergeTool.Vcs = (VersionControlSystem)Activator.CreateInstance(vcsType);
-                        // button.text = VersionControlSystem.GetTitle(MergeTool.vcs);
-                        Refresh();
+                        UpdateContent();
                     });
             }
             button.clicked += () =>

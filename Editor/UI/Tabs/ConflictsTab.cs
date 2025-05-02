@@ -9,9 +9,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             label = "Conflicts";
         }
 
-        protected override void BuildUI()
+        protected override void CreateGUI()
         {
-            BuildConflictList();
+        }
+
+        public override void UpdateContent()
+        {
+            root.Clear();
+            BuildConflictList();   
         }
 
         private void BuildConflictList()

@@ -30,10 +30,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        private VisualElement mergeUI;
+        private VisualElement multipleObjectsUI;
         private Button gameObjectButton;
         private ScrollView scrollView;
         private ProgressBar progressBar;
         private Button finishButton;
+        private VisualElement noMergeProgressInfo;
 
         public MergeTab(VisualElement content) : base(content)
         {
@@ -41,19 +44,45 @@ namespace ThirteenPixels.OpenUnityMergeTool
             currentContainerIndex = 0;
         }
 
-        protected override void BuildUI()
+        protected override void CreateGUI()
         {
-            if (MergeTool.CurrentMergeProcess == null)
-            {
-                root.Add(new Label("No merge in progress. Start a merge from the conflicts tab."));
-                return;
-            }
+            noMergeProgressInfo = new Label("No merge in progress. Start a merge from the conflicts tab.");
+            root.Add(noMergeProgressInfo);
+
+            mergeUI = new VisualElement();
+            mergeUI.style.flexGrow = 1;
+            root.Add(mergeUI);
 
             AddTopLine();
             AddScrollView();
             AddBottomLine();
+        }
 
-            ShowCurrentContainer();
+        public override void UpdateContent()
+        {
+            if (MergeTool.CurrentMergeProcess == null)
+            {
+                noMergeProgressInfo.style.Show();
+                mergeUI.style.Hide();
+            }
+            else
+            {
+                noMergeProgressInfo.style.Hide();
+                mergeUI.style.Show();
+
+                var total = MergeTool.CurrentMergeProcess.MergeActionContainers.Count;
+                var completed = MergeTool.CurrentMergeProcess.CompletedMergeActionContainerCount;
+
+                multipleObjectsUI.visible = total > 1;
+
+                progressBar.highValue = total;
+                progressBar.lowValue = completed;
+                progressBar.Q<Label>().text = $"{completed} / {total}";
+
+                finishButton.SetEnabled(completed == total);
+
+                ShowCurrentContainer();
+            }
         }
 
         private void AddTopLine()
@@ -74,7 +103,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             line.Add(new HorizontalSpacer());
 
-            root.Add(line);
+            mergeUI.Add(line);
         }
 
         private void AddScrollView()
@@ -83,7 +112,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             scrollView.style.flexGrow = 1;
             scrollView.style.marginTop = 5;
             scrollView.style.marginBottom = 5;
-            root.Add(scrollView);
+            mergeUI.Add(scrollView);
         }
 
         private void AddBottomLine()
@@ -93,52 +122,33 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.style.flexShrink = 0;
             line.style.height = 30;
 
-            if (MergeTool.CurrentMergeProcess != null)
-            {
-                if (MergeTool.CurrentMergeProcess.MergeActionContainers.Count > 1)
-                {
-                    var pickButton = new Button();
-                    pickButton.text = "Pick GameObject";
-                    line.Add(pickButton);
+            multipleObjectsUI = new HorizontalLayout();
+            line.Add(multipleObjectsUI);
 
-                    var nextButton = new Button(ShowNextContainer);
-                    nextButton.text = "Next →";
-                    line.Add(nextButton);
-                }
+            var pickButton = new Button();
+            pickButton.text = "Pick GameObject";
+            multipleObjectsUI.Add(pickButton);
 
-                progressBar = new ProgressBar();
-                progressBar.style.flexGrow = 1;
-                progressBar.style.marginTop = 5;
-                line.Add(progressBar);
+            var nextButton = new Button(ShowNextContainer);
+            nextButton.text = "Next →";
+            multipleObjectsUI.Add(nextButton);
 
-                var cancelButton = new Button(CancelCurrentMergeProgress);
-                cancelButton.text = "Cancel merge";
-                cancelButton.SetButtonColor(StyleConstants.UnmergedColor);
-                line.Add(cancelButton);
+            progressBar = new ProgressBar();
+            progressBar.style.flexGrow = 1;
+            progressBar.style.marginTop = 5;
+            multipleObjectsUI.Add(progressBar);
 
-                finishButton = new Button(MergeTool.FinishCurrentMergeProgress);
-                finishButton.text = "Finish merge";
-                finishButton.SetButtonColor(StyleConstants.MergedColor);
-                line.Add(finishButton);
+            var cancelButton = new Button(CancelCurrentMergeProgress);
+            cancelButton.text = "Cancel merge";
+            cancelButton.SetButtonColor(StyleConstants.UnmergedColor);
+            line.Add(cancelButton);
 
-                UpdateContent();
-            }
+            finishButton = new Button(MergeTool.FinishCurrentMergeProgress);
+            finishButton.text = "Finish merge";
+            finishButton.SetButtonColor(StyleConstants.MergedColor);
+            line.Add(finishButton);
 
-            root.Add(line);
-        }
-
-        private void UpdateContent()
-        {
-            if (MergeTool.CurrentMergeProcess == null) return;
-
-            var total = MergeTool.CurrentMergeProcess.MergeActionContainers.Count;
-            var completed = MergeTool.CurrentMergeProcess.CompletedMergeActionContainerCount;
-
-            progressBar.highValue = total;
-            progressBar.lowValue = completed;
-            progressBar.Q<Label>().text = $"{completed} / {total}";
-
-            finishButton.SetEnabled(completed == total);
+            mergeUI.Add(line);
         }
 
         private void ShowCurrentContainer()
