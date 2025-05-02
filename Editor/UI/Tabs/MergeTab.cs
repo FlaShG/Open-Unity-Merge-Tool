@@ -1,5 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEditor;
     using UnityEngine.UIElements;
 
     internal class MergeTab : MergeToolTab
@@ -110,7 +111,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 progressBar.style.marginTop = 5;
                 line.Add(progressBar);
 
-                var cancelButton = new Button(MergeTool.CancelCurrentMergeProgress);
+                var cancelButton = new Button(CancelCurrentMergeProgress);
                 cancelButton.text = "Cancel merge";
                 cancelButton.SetButtonColor(StyleConstants.UnmergedColor);
                 line.Add(cancelButton);
@@ -159,6 +160,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 index = 0;
             }
             CurrentContainerIndex = index;
+        }
+
+        private void CancelCurrentMergeProgress()
+        {
+            if (MergeTool.CurrentMergeProcess.CompletedMergeActionContainerCount > 0)
+            {
+                var result = EditorUtility.DisplayDialog(DialogConstants.title, "Do you really want to cancel the current merge process?", "Yes", "No, continue");
+
+                if (result == false)
+                {
+                    return;
+                }
+            }
+
+            MergeTool.CancelCurrentMergeProgress();
         }
     }
 }
