@@ -123,10 +123,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                     if (DifferentValues(ourProperty, theirProperty))
                     {
-                        if (mergeAction == null)
-                        {
-                            mergeAction = new MergeActionPropertyValues(ours);
-                        }
+                        mergeAction ??= new MergeActionPropertyValues(ours);
 
                         mergeAction.AddProperty(ourProperty.Copy(), theirProperty.Copy());
                     }

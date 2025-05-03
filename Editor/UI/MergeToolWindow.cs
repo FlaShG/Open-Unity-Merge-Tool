@@ -71,6 +71,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 tabView.selectedTabIndex = 1;
                 conflictsTab.Select();
+                mergeTab.UpdateContent();
             }
             else
             {

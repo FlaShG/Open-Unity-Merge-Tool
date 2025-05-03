@@ -42,6 +42,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 noMergeProgressInfo.style.Show();
                 mergeUI.style.Hide();
+
+                scrollView.Clear();
+                currentContainerIndex = 0;
+                currentContainer = null;
             }
             else
             {
