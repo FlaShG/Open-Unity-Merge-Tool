@@ -2,7 +2,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEngine;
     using UnityEngine.UIElements;
-    using System.Collections.Generic;
 
     /// <summary>
     /// UI represantation of a single component or GameObject.<br/>
@@ -13,7 +12,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private readonly MergeAction mergeAction;
         private readonly VisualElement background;
         private readonly MergeActionLine topLine;
-        private readonly List<MergeActionLine> childrenLines;
 
         public MergeActionCard(MergeAction mergeAction)
         {
@@ -36,11 +34,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var innerBox = new Margin(4, 4, 8, 0);
                 background.Add(innerBox);
 
-                childrenLines = new();
                 foreach (var child in mergeAction.Children)
                 {
                     var line = new MergeActionLine(child, MergeActionLine.Type.Child);
-                    childrenLines.Add(line);
                     innerBox.Add(line);
                 }
             }
@@ -62,13 +58,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             background.style.backgroundColor = StyleConstants.GetColorFor(mergeAction.DecisionState);
             topLine.Refresh();
 
-            if (childrenLines != null)
-            {
-                foreach (var line in childrenLines)
-                {
-                    line.Refresh();
-                }
-            }
+            background.Query<MergeActionLine>().ForEach(line => line.Refresh());
         }
     }
 }
