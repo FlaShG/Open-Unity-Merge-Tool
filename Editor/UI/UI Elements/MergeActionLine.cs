@@ -2,7 +2,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEngine;
     using UnityEngine.UIElements;
-    using UnityEditor.UIElements;
 
     /// <summary>
     /// UI representation of a single <see cref="IMergeable"/>.
@@ -52,16 +51,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (mergeable.SerializedProperty != null)
             {
-                var propertyField = new PropertyField(mergeable.SerializedProperty);
-                propertyField.Bind(mergeable.SerializedProperty.serializedObject);
-                propertyField.TrackPropertyValue(mergeable.SerializedProperty, _ =>
-                {
-                    mergeable.AcceptNewValue();
-                    SendUpdateEvent();
-                });
-                propertyField.style.flexGrow = 1;
-                propertyField.style.marginTop = 3;
-                line.Add(propertyField);
+                line.Add(new PropertyField(mergeable, SendUpdateEvent));
             }
             else
             {
