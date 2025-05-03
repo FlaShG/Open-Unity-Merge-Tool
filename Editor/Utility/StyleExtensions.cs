@@ -21,6 +21,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
+        public static void SetSize(this IStyle style, float width, float height)
+        {
+            style.width = width;
+            style.height = height;
+        }
+
         public static void SetPadding(this IStyle style, float padding)
         {
             style.SetPadding(padding, padding, padding, padding);

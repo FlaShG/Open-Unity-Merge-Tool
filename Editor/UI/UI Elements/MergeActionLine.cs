@@ -1,6 +1,5 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
-    using UnityEngine;
     using UnityEngine.UIElements;
 
     /// <summary>
@@ -33,7 +32,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line = new HorizontalLayout();
             if (type == Type.Header)
             {
-                line.style.backgroundColor = new Color(0f, 0f, 0f, 0.3f);
+                line.style.backgroundColor = StyleConstants.BackgroundLineColor;
                 line.style.height = 22;
                 line.style.SetPadding(3, 3, 4, 4);
             }
@@ -59,8 +58,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     titleIcon.image = mergeable.Title.image;
                     titleIcon.style.flexGrow = 0;
                     titleIcon.style.flexShrink = 0;
-                    titleIcon.style.width = 16;
-                    titleIcon.style.height = 16;
+                    titleIcon.style.SetSize(16, 16);
                     titleIcon.style.alignSelf = Align.Center;
                     line.Add(titleIcon);
                 }
