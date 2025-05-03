@@ -9,6 +9,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public static class Icons
         {
             public static Texture GameObject => GetEditorIcon("GameObject Icon");
+        }
 
         public static readonly Color BackgroundLineColor = new Color(0f, 0f, 0f, 0.3f);
 
