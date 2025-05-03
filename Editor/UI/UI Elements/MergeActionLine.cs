@@ -15,7 +15,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private const int applyButtonWidth = 100;
 
-        private readonly MergeActionCard parentCard;
         private readonly IMergeable mergeable;
 
         private readonly VisualElement line;
@@ -24,9 +23,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private readonly Type type;
 
-        public MergeActionLine(MergeActionCard parentCard, IMergeable mergeable, Type type, bool showButtons = true)
+        public MergeActionLine(IMergeable mergeable, Type type, bool showButtons = true)
         {
-            this.parentCard = parentCard;
             this.mergeable = mergeable;
             this.type = type;
 
@@ -170,7 +168,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void SendUpdateEvent()
         {
-            parentCard.Refresh();
             MergeTool.UpdateAfterMergeStateChange();
         }
     }

@@ -52,6 +52,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
             // TODO CheckIfMerged
         }
 
+        public void UseOurs()
+        {
+            foreach (var action in mergeActions)
+            {
+                action.UseOurs();
+            }
+        }
+
+        public void UseTheirs()
+        {
+            foreach (var action in mergeActions)
+            {
+                action.UseTheirs();
+            }
+        }
+
         private void FindComponentDifferences()
         {
             var ourComponents = ourGameObject.GetComponents<Component>();

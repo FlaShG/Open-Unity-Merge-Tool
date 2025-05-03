@@ -11,6 +11,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private VisualElement mergeUI;
         private VisualElement multipleObjectsUI;
+        private VisualElement applyButtonsUI;
         private Label gameObjectLabel;
         private ScrollView scrollView;
         private ProgressBar progressBar;
@@ -66,7 +67,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 finishButton.SetEnabled(completed == total);
                 nextButton.SetEnabled(completed < total);
 
-                if (currentContainer == null)
+                if (currentContainer != null)
+                {
+                    UpdateCards();
+                }
+                else
                 {
                     currentContainerIndex = 0;
                     ShowCurrentContainer();
@@ -80,6 +85,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.style.flexShrink = 0;
             line.style.height = 30;
             line.style.backgroundColor = new Color(0f, 0f, 0f, 0.3f);
+            mergeUI.Add(line);
 
             var gameObjectButton = new Button(() => currentContainer.TargetGameObject.Highlight());
             line.Add(gameObjectButton);
@@ -97,7 +103,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             line.Add(new HorizontalSpacer());
 
-            mergeUI.Add(line);
+            applyButtonsUI = new VisualElement();
+            applyButtonsUI.style.flexDirection = FlexDirection.Row;
+            line.Add(applyButtonsUI);
+
+            var applyOursButton = new Button(UseOurs);
+            applyOursButton.text = "Apply\nOurs";
+            applyOursButton.style.fontSize = 11;
+            applyButtonsUI.Add(applyOursButton);
+
+            var applyTheirsButton = new Button(UseTheirs);
+            applyTheirsButton.text = "Apply\nTheirs";
+            applyTheirsButton.style.fontSize = 11;
+            applyButtonsUI.Add(applyTheirsButton);
         }
 
         private void AddScrollView()
@@ -115,6 +133,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.style.alignSelf = Align.FlexEnd;
             line.style.flexShrink = 0;
             line.style.height = 30;
+            mergeUI.Add(line);
 
             multipleObjectsUI = new HorizontalLayout();
             line.Add(multipleObjectsUI);
@@ -142,8 +161,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             finishButton.text = "Finish merge";
             finishButton.SetButtonColor(StyleConstants.MergedColor);
             line.Add(finishButton);
-
-            mergeUI.Add(line);
         }
 
         private void ShowContainer(GameObjectMergeActionContainer container)
@@ -157,6 +174,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 scrollView.Add(new MergeActionCard(mergeAction));
             }
+
+            applyButtonsUI.style.SetVisible(currentContainer.MergeActions.Count > 1);
         }
 
         private void ShowCurrentContainer()
@@ -179,6 +198,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             ShowContainer(containers[currentContainerIndex]);
         }
 
+        private void UpdateCards()
+        {
+            scrollView.Query<MergeActionCard>().ForEach(card => card.UpdateContent());
+        }
+
         private void CancelCurrentMergeProgress()
         {
             if (MergeTool.CurrentMergeProcess.CompletedMergeActionContainerCount > 0)
@@ -192,6 +216,18 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             MergeTool.CancelCurrentMergeProgress();
+        }
+
+        private void UseOurs()
+        {
+            currentContainer.UseOurs();
+            MergeTool.UpdateAfterMergeStateChange();
+        }
+
+        private void UseTheirs()
+        {
+            currentContainer.UseTheirs();
+            MergeTool.UpdateAfterMergeStateChange();
         }
     }
 }
