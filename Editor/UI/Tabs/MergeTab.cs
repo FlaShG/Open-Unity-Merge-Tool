@@ -14,6 +14,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private Label gameObjectLabel;
         private ScrollView scrollView;
         private ProgressBar progressBar;
+        private Button nextButton;
         private Button finishButton;
         private VisualElement noMergeProgressInfo;
 
@@ -63,6 +64,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 progressBar.Q<Label>().text = $"{completed} / {total}";
 
                 finishButton.SetEnabled(completed == total);
+                nextButton.SetEnabled(completed < total);
 
                 if (currentContainer == null)
                 {
@@ -121,7 +123,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             pickButton.text = "Pick GameObject";
             multipleObjectsUI.Add(pickButton);
 
-            var nextButton = new Button(ShowNextContainer);
+            nextButton = new Button(ShowNextIncompleteContainer);
             nextButton.text = "Next →";
             multipleObjectsUI.Add(nextButton);
 
@@ -162,14 +164,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
             ShowContainer(MergeTool.CurrentMergeProcess.MergeActionContainers[currentContainerIndex]);
         }
 
-        private void ShowNextContainer()
+        private void ShowNextIncompleteContainer()
         {
-            currentContainerIndex++;
-            if (currentContainerIndex >= MergeTool.CurrentMergeProcess.MergeActionContainers.Count)
+            var containers = MergeTool.CurrentMergeProcess.MergeActionContainers;
+            do
             {
-                currentContainerIndex = 0;
+                currentContainerIndex++;
+                if (currentContainerIndex >= containers.Count)
+                {
+                    currentContainerIndex = 0;
+                }
             }
-            ShowContainer(MergeTool.CurrentMergeProcess.MergeActionContainers[currentContainerIndex]);
+            while (containers[currentContainerIndex].IsCompleted);
+            ShowContainer(containers[currentContainerIndex]);
         }
 
         private void CancelCurrentMergeProgress()
