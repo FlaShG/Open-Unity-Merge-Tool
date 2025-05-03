@@ -13,8 +13,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public SerializedProperty SerializedProperty => null;
         public virtual string ApplyOursButtonLabel => ">>>";
         public virtual string ApplyTheirsButtonLabel => "<<<";
-        public object OurValue => null;
-        public object TheirValue => null;
+        public virtual object OurValue => null;
+        public virtual object TheirValue => null;
         public abstract bool IsUsingOurs { get; }
         public abstract bool IsUsingTheirs { get; }
         public virtual bool OurValueIsPrefabDefault => false;
