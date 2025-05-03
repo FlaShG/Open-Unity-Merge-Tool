@@ -1,6 +1,7 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using System.IO;
+    using UnityEditor;
     using UnityEngine.UIElements;
 
     internal class ConflictsTab : MergeToolTab
@@ -63,14 +64,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.Add(padding);
 
             var icon = new Image();
-            if (FileUtility.IsScene(path))
-            {
-                icon.image = StyleConstants.Icons.Scene;
-            }
-            else if (FileUtility.IsPrefab(path))
-            {
-                icon.image = StyleConstants.Icons.Prefab;
-            }
+            icon.image = AssetDatabase.GetCachedIcon(path);
             icon.style.SetSize(18, 18);
             padding.Add(icon);
 
