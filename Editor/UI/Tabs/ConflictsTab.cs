@@ -63,11 +63,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.Add(padding);
 
             var icon = new Image();
-            if (path.EndsWith(".unity"))
+            if (FileUtility.IsScene(path))
             {
                 icon.image = StyleConstants.Icons.Scene;
             }
-            else if (path.EndsWith(".prefab"))
+            else if (FileUtility.IsPrefab(path))
             {
                 icon.image = StyleConstants.Icons.Prefab;
             }
