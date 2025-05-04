@@ -88,9 +88,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static void UseOurs(string path)
         {
-            EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using our version of\n{path}...", 0f);
+            var message = $"Using our version of\n{path}...";
+            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0f);
             vcs.CheckoutOurs(path);
-            EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using our version of\n{path}...", 0.5f);
+            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
             vcs.MarkAsMerged(path);
             OnStateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
@@ -98,9 +99,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static void UseTheirs(string path)
         {
-            EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using their version of\n{path}...", 0f);
+            var message = $"Using their version of\n{path}...";
+            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0f);
             vcs.CheckoutTheirs(path);
-            EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using their version of\n{path}...", 0.5f);
+            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
             vcs.MarkAsMerged(path);
             OnStateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
