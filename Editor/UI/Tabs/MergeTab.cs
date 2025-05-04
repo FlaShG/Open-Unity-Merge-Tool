@@ -94,6 +94,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var gameObjectButton = new Button(() => currentContainer.TargetGameObject.Highlight());
             line.Add(gameObjectButton);
+            gameObjectButton.style.SetBorder(1, StyleConstants.HighlightColor);
 
             var icon = new Image();
             icon.image = StyleConstants.Icons.GameObject;
