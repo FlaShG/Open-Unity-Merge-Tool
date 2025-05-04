@@ -110,12 +110,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             gameObjectPathLabel = new Label();
             gameObjectPathLabel.style.fontSize = 11;
+            gameObjectPathLabel.style.overflow = Overflow.Hidden;
             gameObjectPathLabel.style.SetMargin(1, -6, 0, 0);
             gameObjectPathLabel.style.color = StyleConstants.Colors.LightText;
             gameObjectNamePanel.Add(gameObjectPathLabel);
 
             gameObjectLabel = new Label();
             gameObjectLabel.style.fontSize = 18;
+            gameObjectLabel.style.overflow = Overflow.Hidden;
             gameObjectLabel.style.marginTop = 6;
             gameObjectNamePanel.Add(gameObjectLabel);
 
