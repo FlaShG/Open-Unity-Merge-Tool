@@ -172,7 +172,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             pickButton.text = "Pick GameObject";
             pickButton.clicked += () =>
             {
-                pickGameObjectDropdown.DropDown(pickButton.worldBound, pickButton, true, true);
+                pickGameObjectDropdown.DropDown(pickButton.worldBound, pickButton, false);
             };
             return pickButton;
         }

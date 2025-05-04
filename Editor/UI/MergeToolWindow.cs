@@ -57,7 +57,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void RefreshUI()
         {
-            if (MergeTool.Vcs == null)
+            if (MergeTool.VcsStatus != VersionControlSystem.Status.Okay)
             {
                 SelectTab(setupTab);
             }

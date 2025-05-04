@@ -7,6 +7,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
     internal class SetupTab : MergeToolTab
     {
         private GenericDropdownMenu vcsDropdown;
+        private Button vcsDropdownButton;
+        private Label statusLabel;
 
         protected override void CreateGUI()
         {
@@ -28,28 +30,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                         MergeTool.TriggerStateChangeEvent();
                     });
             }
-        }
 
-        private void AddVCSDropdownButton()
-        {
-            var line = new HorizontalLayout();
-            line.Add(new Label("Version control system:"));
+            vcsDropdownButton.text = VersionControlSystem.GetTitle(MergeTool.Vcs);
 
-            var button = new Button();
-            button.style.flexGrow = 1;
-            button.text = VersionControlSystem.GetTitle(MergeTool.Vcs);
-            button.enabledSelf = MergeTool.CurrentMergeProcess == null;
-            button.clicked += () =>
-            {
-                this.vcsDropdown.DropDown(button.worldBound, button, true, true);
-            };
-            line.Add(button);
-
-            Add(line);
-        }
-
-        private void AddStatusLabel()
-        {
             string status;
             switch (MergeTool.VcsStatus)
             {
@@ -63,7 +46,29 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     status = "VCS not found";
                     break;
             }
-            Add(new Label($"Status: {status}"));
+            statusLabel.text = $"Status: {status}";
+        }
+
+        private void AddVCSDropdownButton()
+        {
+            var line = new HorizontalLayout();
+            line.Add(new Label("Version control system:"));
+
+            vcsDropdownButton = new Button();
+            vcsDropdownButton.style.flexGrow = 1;
+            vcsDropdownButton.enabledSelf = MergeTool.CurrentMergeProcess == null;
+            vcsDropdownButton.clicked += () =>
+            {
+                this.vcsDropdown.DropDown(vcsDropdownButton.worldBound, vcsDropdownButton, false);
+            };
+            line.Add(vcsDropdownButton);
+
+            Add(line);
+        }
+
+        private void AddStatusLabel()
+        {
+            Add(statusLabel = new Label());
         }
     }
 }
