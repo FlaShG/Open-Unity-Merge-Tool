@@ -111,7 +111,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectPathLabel = new Label();
             gameObjectPathLabel.style.fontSize = 11;
             gameObjectPathLabel.style.SetMargin(1, -6, 0, 0);
-            gameObjectPathLabel.style.color = new UnityEngine.Color(1, 1, 1, 0.5f);
+            gameObjectPathLabel.style.color = StyleConstants.LightTextColor;
             gameObjectNamePanel.Add(gameObjectPathLabel);
 
             gameObjectLabel = new Label();
