@@ -6,11 +6,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal class SetupTab : MergeToolTab
     {
-        public SetupTab(VisualElement content) : base(content)
-        {
-            label = "Setup";
-        }
-
         protected override void CreateGUI()
         {
             AddVCSDropdown();
@@ -50,7 +45,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             };
             line.Add(button);
 
-            root.Add(line);
+            Add(line);
         }
 
         private void AddStatusLabel()
@@ -68,7 +63,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     status = "VCS not found";
                     break;
             }
-            root.Add(new Label($"Status: {status}"));
+            Add(new Label($"Status: {status}"));
         }
     }
 }

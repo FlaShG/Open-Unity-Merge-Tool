@@ -6,18 +6,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal class ConflictsTab : MergeToolTab
     {
-        public ConflictsTab(VisualElement content) : base(content)
-        {
-            label = "Conflicts";
-        }
-
         protected override void CreateGUI()
         {
         }
 
         public override void UpdateContent()
         {
-            root.Clear();
+            Clear();
             BuildConflictList();
         }
 
@@ -39,8 +34,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 if (firstResult)
                 {
                     firstResult = false;
-                    root.Add(new Label("Detected unresolved merge conflicts:"));
-                    root.Add(scrollView);
+                    Add(new Label("Detected unresolved merge conflicts:"));
+                    Add(scrollView);
                 }
 
                 scrollView.Add(CreateLine(path));
@@ -48,7 +43,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (firstResult)
             {
-                root.Add(new Label("No merge conflicts detected."));
+                Add(new Label("No merge conflicts detected."));
             }
         }
 
@@ -76,9 +71,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             line.Add(new HorizontalSpacer());
 
-            var button = new Button();
-            button.text = "Merge";
-            button.clicked += () => MergeTool.StartMergeProcess(path);
+            var button = new Button(() => MergeTool.StartMergeProcess(path));
+            button.text = "Start Merging";
+            button.SetButtonColor(StyleConstants.MergedColor);
             line.Add(button);
 
             return line;

@@ -18,20 +18,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private Button finishButton;
         private VisualElement noMergeProgressInfo;
 
-        public MergeTab(VisualElement content) : base(content)
-        {
-            label = "Merge";
-            currentContainerIndex = 0;
-        }
-
         protected override void CreateGUI()
         {
             noMergeProgressInfo = new Label("No merge in progress. Start a merge from the conflicts tab.");
-            root.Add(noMergeProgressInfo);
+            Add(noMergeProgressInfo);
 
             mergeUI = new VisualElement();
             mergeUI.style.flexGrow = 1;
-            root.Add(mergeUI);
+            Add(mergeUI);
 
             AddTopLine();
             AddScrollView();

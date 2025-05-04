@@ -15,7 +15,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             window.minSize = new Vector2(600, 200);
         }
 
-        private TabView tabView;
+        private VisualElement tabContent;
         private SetupTab setupTab;
         private ConflictsTab conflictsTab;
         private MergeTab mergeTab;
@@ -26,18 +26,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
             root.style.flexDirection = FlexDirection.Column;
             root.style.SetPadding(5);
 
-            var tabContent = new VisualElement();
+            tabContent = new VisualElement();
             tabContent.name = "Tab Content";
             tabContent.style.flexGrow = 1;
             tabContent.style.SetPadding(6, 4, 4, 2);
-
-            tabView = new TabView();
-            tabView.Add(setupTab = new SetupTab(tabContent));
-            tabView.Add(conflictsTab = new ConflictsTab(tabContent));
-            tabView.Add(mergeTab = new MergeTab(tabContent));
-            root.Add(tabView);
-
             root.Add(tabContent);
+
+            setupTab = new SetupTab();
+            conflictsTab = new ConflictsTab();
+            mergeTab = new MergeTab();
 
             RefreshUI();
             MergeTool.OnMergeProcessChanged += RefreshUI;
@@ -64,20 +61,24 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             if (MergeTool.Vcs == null)
             {
-                tabView.selectedTabIndex = 0;
-                setupTab.Select();
+                SelectTab(setupTab);
             }
             else if (MergeTool.CurrentMergeProcess == null)
             {
-                tabView.selectedTabIndex = 1;
-                conflictsTab.Select();
                 mergeTab.UpdateContent();
+                SelectTab(conflictsTab);
             }
             else
             {
-                tabView.selectedTabIndex = 2;
-                mergeTab.Select();
+                SelectTab(mergeTab);
             }
+        }
+
+        private void SelectTab(MergeToolTab tab)
+        {
+            tab.UpdateContent();
+            tabContent.Clear();
+            tabContent.Add(tab);
         }
 
         void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
