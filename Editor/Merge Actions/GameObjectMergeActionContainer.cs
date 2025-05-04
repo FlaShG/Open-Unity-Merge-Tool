@@ -208,19 +208,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 return true;
             }
 
-            var our = ourProperty.GetValue();
-            var their = theirProperty.GetValue();
-
             if (ourProperty.propertyType == SerializedPropertyType.ObjectReference)
             {
+                var our = ourProperty.GetValue();
+                var their = theirProperty.GetValue();
+
                 if (our != null && their != null)
                 {
                     our = ObjectId.GetFor(our as UnityObject);
                     their = ObjectId.GetFor(their as UnityObject);
                 }
+                return !Equals(our, their);
             }
 
-            return !Equals(our, their);
+            return !SerializedProperty.DataEquals(ourProperty, theirProperty);
         }
 
         private bool ShouldEnterChildren(SerializedProperty serializedProperty)
