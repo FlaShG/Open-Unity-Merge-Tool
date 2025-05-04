@@ -32,7 +32,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line = new HorizontalLayout();
             if (type == Type.Header)
             {
-                line.style.backgroundColor = StyleConstants.BackgroundLineColor;
+                line.style.backgroundColor = StyleConstants.Colors.BackgroundLine;
                 line.style.height = 22;
                 line.style.SetPadding(3, 3, 4, 4);
             }
@@ -86,7 +86,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 applyOursButton = new Button(UseOurs);
                 if (mergeable.OurValueIsPrefabDefault)
                 {
-                    applyOursButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
+                    applyOursButton.style.SetBorder(1.5f, StyleConstants.Colors.PrefabConnection);
                 }
                 if (canShowPropertyField && mergeable.OurValue != null)
                 {
@@ -104,7 +104,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 applyTheirsButton = new Button(UseTheirs);
                 if (mergeable.TheirValueIsPrefabDefault)
                 {
-                    applyTheirsButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
+                    applyTheirsButton.style.SetBorder(1.5f, StyleConstants.Colors.PrefabConnection);
                 }
                 if (canShowPropertyField && mergeable.TheirValue != null)
                 {
@@ -145,7 +145,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 {
                     if (mergeable.IsUsingOurs)
                     {
-                        applyOursButton.SetButtonColor(StyleConstants.MergedColor);
+                        applyOursButton.SetButtonColor(StyleConstants.Colors.Merged);
                     }
                     else
                     {
@@ -153,7 +153,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     }
                     if (mergeable.IsUsingTheirs)
                     {
-                        applyTheirsButton.SetButtonColor(StyleConstants.MergedColor);
+                        applyTheirsButton.SetButtonColor(StyleConstants.Colors.Merged);
                     }
                     else
                     {

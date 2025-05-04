@@ -16,7 +16,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             this.mergeAction = mergeAction;
             style.marginTop = 2;
             style.marginBottom = 2;
-            style.SetBorder(1f, StyleConstants.CardBorderColor);
+            style.SetBorder(1f, StyleConstants.Colors.CardBorder);
 
             background = CreateBackground();
 

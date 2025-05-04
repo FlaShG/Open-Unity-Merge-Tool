@@ -52,7 +52,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private VisualElement CreateLine(string path)
         {
             var line = new HorizontalLayout();
-            line.style.backgroundColor = StyleConstants.BackgroundLineColor;
+            line.style.backgroundColor = StyleConstants.Colors.BackgroundLine;
             line.style.marginTop = 4;
 
             var padding = new VisualElement();
@@ -75,7 +75,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var button = new Button(() => MergeTool.StartMergeProcess(path));
             button.text = "Start Merging";
-            button.SetButtonColor(StyleConstants.MergedColor);
+            button.SetButtonColor(StyleConstants.Colors.Merged);
             line.Add(button);
 
             var separator = new Label("|");

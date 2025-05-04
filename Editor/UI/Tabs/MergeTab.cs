@@ -90,11 +90,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var line = new HorizontalLayout();
             line.style.flexShrink = 0;
             line.style.height = 36;
-            line.style.backgroundColor = StyleConstants.BackgroundLineColor;
+            line.style.backgroundColor = StyleConstants.Colors.BackgroundLine;
             mergeUI.Add(line);
 
             var gameObjectButton = new Button(() => currentContainer.TargetGameObject.Highlight());
-            gameObjectButton.style.SetBorder(1, StyleConstants.HighlightColor);
+            gameObjectButton.style.SetBorder(1, StyleConstants.Colors.Highlight);
             gameObjectButton.tooltip = "Select and highlight the GameObject.";
             gameObjectButton.style.SetPadding(3, 4, 6, 6);
             line.Add(gameObjectButton);
@@ -111,7 +111,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectPathLabel = new Label();
             gameObjectPathLabel.style.fontSize = 11;
             gameObjectPathLabel.style.SetMargin(1, -6, 0, 0);
-            gameObjectPathLabel.style.color = StyleConstants.LightTextColor;
+            gameObjectPathLabel.style.color = StyleConstants.Colors.LightText;
             gameObjectNamePanel.Add(gameObjectPathLabel);
 
             gameObjectLabel = new Label();
@@ -171,12 +171,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var cancelButton = new Button(CancelCurrentMergeProgress);
             cancelButton.text = "Cancel merge";
-            cancelButton.SetButtonColor(StyleConstants.UnmergedColor);
+            cancelButton.SetButtonColor(StyleConstants.Colors.Unmerged);
             line.Add(cancelButton);
 
             finishButton = new Button(MergeTool.FinishCurrentMergeProgress);
             finishButton.text = "Finish merge";
-            finishButton.SetButtonColor(StyleConstants.MergedColor);
+            finishButton.SetButtonColor(StyleConstants.Colors.Merged);
             line.Add(finishButton);
         }
 
