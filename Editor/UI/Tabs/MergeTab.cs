@@ -12,6 +12,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private VisualElement multipleObjectsUI;
         private VisualElement applyButtonsUI;
         private Label gameObjectLabel;
+        private Label gameObjectPathLabel;
         private ScrollView scrollView;
         private ProgressBar progressBar;
         private Button nextButton;
@@ -88,24 +89,35 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             var line = new HorizontalLayout();
             line.style.flexShrink = 0;
-            line.style.height = 30;
+            line.style.height = 36;
             line.style.backgroundColor = StyleConstants.BackgroundLineColor;
             mergeUI.Add(line);
 
             var gameObjectButton = new Button(() => currentContainer.TargetGameObject.Highlight());
             gameObjectButton.style.SetBorder(1, StyleConstants.HighlightColor);
             gameObjectButton.tooltip = "Select and highlight the GameObject.";
+            gameObjectButton.style.SetPadding(3, 4, 6, 6);
             line.Add(gameObjectButton);
 
             var icon = new Image();
             icon.image = StyleConstants.Icons.GameObject;
-            icon.style.SetSize(22, 22);
+            icon.style.SetSize(26, 26);
             gameObjectButton.Add(icon);
+
+            var gameObjectNamePanel = new VisualElement();
+            gameObjectNamePanel.style.flexGrow = 1;
+            line.Add(gameObjectNamePanel);
+
+            gameObjectPathLabel = new Label();
+            gameObjectPathLabel.style.fontSize = 11;
+            gameObjectPathLabel.style.SetMargin(1, -6, 0, 0);
+            gameObjectPathLabel.style.color = new UnityEngine.Color(1, 1, 1, 0.5f);
+            gameObjectNamePanel.Add(gameObjectPathLabel);
 
             gameObjectLabel = new Label();
             gameObjectLabel.style.fontSize = 18;
-            gameObjectLabel.style.marginTop = 4;
-            line.Add(gameObjectLabel);
+            gameObjectLabel.style.marginTop = 6;
+            gameObjectNamePanel.Add(gameObjectLabel);
 
             line.Add(new HorizontalSpacer());
 
@@ -190,7 +202,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (container != null)
             {
+                var path = container.TargetGameObject.GetPathWithoutSelf();
+                gameObjectPathLabel.text = path;
+                gameObjectPathLabel.style.SetVisible(!string.IsNullOrEmpty(path));
+
                 gameObjectLabel.text = container.TargetGameObject.name;
+
                 foreach (var mergeAction in container.MergeActions)
                 {
                     scrollView.Add(new MergeActionCard(mergeAction));

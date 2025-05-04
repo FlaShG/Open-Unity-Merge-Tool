@@ -77,5 +77,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Gets the path of this GameObject in the hierarchy.
+        /// </summary>
+        public static string GetPathWithoutSelf(this GameObject gameObject)
+        {
+            var transform = gameObject.transform;
+            var sb = new StringBuilder();
+            while (transform.parent != null)
+            {
+                transform = transform.parent;
+                sb.Insert(0, transform.name + "/");
+            }
+            return sb.ToString();
+        }
     }
 }
