@@ -57,7 +57,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void RefreshUI()
         {
-            if (MergeTool.VcsStatus != VersionControlSystem.Status.Okay)
+            if (IsSelected(setupTab) || MergeTool.VcsStatus != VersionControlSystem.Status.Okay)
             {
                 SelectTab(setupTab);
             }
@@ -79,16 +79,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
             tabContent.Add(tab);
         }
 
-        void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
+        private bool IsSelected(MergeToolTab tab)
         {
-            menu.AddItem(new GUIContent("Debug Status"), false, ShowStatus);
+            return tabContent.Contains(tab);
         }
 
-        private void ShowStatus()
+        void IHasCustomMenu.AddItemsToMenu(GenericMenu menu)
         {
-            EditorUtility.DisplayDialog("Merge Tool Debug Status",
-                $"Merge Process: {MergeTool.CurrentMergeProcess}",
-                "OK");
+            menu.AddItem(new GUIContent("Open Settings"), false, OpenSettings);
+        }
+
+        private void OpenSettings()
+        {
+            SelectTab(setupTab);
         }
     }
 }
