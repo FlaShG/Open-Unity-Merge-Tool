@@ -127,6 +127,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             theirProperty.Dispose();
         }
 
+        public void SortPropertiesAlphabetically()
+        {
+            properties.Sort((a, b) => a.SerializedProperty.name.CompareTo(b.SerializedProperty.name));
+        }
+
         protected override void ApplyOurs()
         {
             foreach (var property in properties)

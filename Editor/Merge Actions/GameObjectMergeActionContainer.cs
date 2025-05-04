@@ -150,6 +150,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             
             if (mergeAction != null)
             {
+                if (ours.GetType() == typeof(Transform))
+                {
+                    // Position, Rotation and Scale happen to be in the correct order when sorted alphabetically.
+                    // And we want to do this because the serialized properties are not in the expected order for some reason.
+                    mergeAction.SortPropertiesAlphabetically();
+                }
+
                 mergeActions.Add(mergeAction);
             }
         }
