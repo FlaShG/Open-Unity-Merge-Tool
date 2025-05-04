@@ -15,6 +15,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private ScrollView scrollView;
         private ProgressBar progressBar;
         private Button nextButton;
+        private GenericDropdownMenu pickGameObjectDropdown;
         private Button finishButton;
         private VisualElement noMergeProgressInfo;
 
@@ -68,6 +69,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 {
                     currentContainerIndex = 0;
                     ShowCurrentContainer();
+                }
+
+                pickGameObjectDropdown = new GenericDropdownMenu();
+                foreach (var container in MergeTool.CurrentMergeProcess.MergeActionContainers)
+                {
+                    pickGameObjectDropdown.AddItem(container.Name,
+                        container.IsCompleted,
+                        () =>
+                        {
+                            ShowContainer(container);
+                        });
                 }
             }
         }
@@ -130,9 +142,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
             multipleObjectsUI = new HorizontalLayout();
             line.Add(multipleObjectsUI);
 
-            var pickButton = new Button();
-            pickButton.text = "Pick GameObject";
-            multipleObjectsUI.Add(pickButton);
+            var pickGameObjectButton = CreatePickGameObjectButton();
+            multipleObjectsUI.Add(pickGameObjectButton);
 
             nextButton = new Button(ShowNextIncompleteContainer);
             nextButton.text = "Next →";
@@ -155,11 +166,24 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.Add(finishButton);
         }
 
+        private Button CreatePickGameObjectButton()
+        {
+            var pickButton = new Button();
+            pickButton.text = "Pick GameObject";
+            pickButton.clicked += () =>
+            {
+                pickGameObjectDropdown.DropDown(pickButton.worldBound, pickButton, true, true);
+            };
+            return pickButton;
+        }
+
         private void ShowContainer(GameObjectMergeActionContainer container)
         {
             if (container == currentContainer) return;
 
+            currentContainerIndex = MergeTool.CurrentMergeProcess.MergeActionContainers.IndexOf(container);
             currentContainer = container;
+
             gameObjectLabel.text = currentContainer.TargetGameObject.name;
             scrollView.Clear();
             foreach (var mergeAction in currentContainer.MergeActions)

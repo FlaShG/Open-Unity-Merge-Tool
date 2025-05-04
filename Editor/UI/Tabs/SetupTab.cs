@@ -22,11 +22,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var line = new HorizontalLayout();
             line.Add(new Label("Version control system:"));
 
-            var button = new Button();
-            button.style.flexGrow = 1;
-            button.text = VersionControlSystem.GetTitle(MergeTool.Vcs);
-            button.enabledSelf = MergeTool.CurrentMergeProcess == null;
-
             var dropdown = new GenericDropdownMenu();
             var availableSystems = TypeCache.GetTypesDerivedFrom<VersionControlSystem>();
             foreach (var vcsType in availableSystems)
@@ -39,9 +34,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
                         UpdateContent();
                     });
             }
+
+            var button = new Button();
+            button.style.flexGrow = 1;
+            button.text = VersionControlSystem.GetTitle(MergeTool.Vcs);
+            button.enabledSelf = MergeTool.CurrentMergeProcess == null;
             button.clicked += () =>
             {
-                dropdown.DropDown(button.worldBound, button, false);
+                dropdown.DropDown(button.worldBound, button, true, true);
             };
             line.Add(button);
 
