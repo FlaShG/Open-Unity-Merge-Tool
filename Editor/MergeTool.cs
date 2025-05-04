@@ -55,7 +55,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 CurrentMergeProcess.Start();
                 TriggerStateChangeEvent();
-                EditorSceneManager.sceneUnloaded += OnSceneUnloaded;
+                SubscribeToSceneChangeEvents();
             }
             catch
             {
@@ -66,7 +66,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static void CancelCurrentMergeProgress()
         {
-            EditorSceneManager.sceneUnloaded -= OnSceneUnloaded;
+            UnsubscribeFromSceneChangeEvents();
             if (CurrentMergeProcess != null)
             {
                 CurrentMergeProcess.Cancel();
@@ -77,7 +77,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static void FinishCurrentMergeProgress()
         {
-            EditorSceneManager.sceneUnloaded -= OnSceneUnloaded;
+            UnsubscribeFromSceneChangeEvents();
             if (CurrentMergeProcess != null)
             {
                 CurrentMergeProcess.Finish();
@@ -113,7 +113,31 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private static void OnSceneUnloaded(Scene scene)
         {
+            EmergencyCancelMergeProcess();
+        }
+
+        private static void OnActiveSceneChangedInEditMode(Scene previous, Scene next)
+        {
+            EmergencyCancelMergeProcess();
+        }
+
+        private static void EmergencyCancelMergeProcess()
+        {
             CancelCurrentMergeProgress();
+            EditorUtility.DisplayDialog(DialogConstants.title, "The merge process had to be cancelled because the scene was reloaded or unloaded.", "OK");
+        }
+
+        private static void SubscribeToSceneChangeEvents()
+        {
+            UnsubscribeFromSceneChangeEvents();
+            EditorSceneManager.sceneUnloaded += OnSceneUnloaded;
+            EditorSceneManager.activeSceneChangedInEditMode += OnActiveSceneChangedInEditMode;
+        }
+
+        private static void UnsubscribeFromSceneChangeEvents()
+        {
+            EditorSceneManager.sceneUnloaded -= OnSceneUnloaded;
+            EditorSceneManager.activeSceneChangedInEditMode -= OnActiveSceneChangedInEditMode;
         }
 
         private static void LoadVCSFromPrefs()
