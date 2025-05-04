@@ -16,15 +16,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
             set 
             {
                 vcs = value;
-                EditorPrefs.SetString(vcsKey, value.GetType().Name);
+                if (vcs != null)
+                {
+                    EditorPrefs.SetString(vcsKey, value.GetType().Name);
+                }
+                else
+                {
+                    EditorPrefs.DeleteKey(vcsKey);
+                }
             }
         }
         public static VersionControlSystem.Status VcsStatus => Vcs?.GetStatus() ?? VersionControlSystem.Status.VCSNotFound;
 
         public static MergeProcess CurrentMergeProcess { get; private set; }
 
-        public static event Action OnMergeProcessChanged;
-        public static event Action OnMergeStateChanged;
+        public static event Action OnStateChanged;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -48,7 +54,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             try
             {
                 CurrentMergeProcess.Start();
-                OnMergeProcessChanged?.Invoke();
+                TriggerStateChangeEvent();
                 EditorSceneManager.sceneUnloaded += OnSceneUnloaded;
             }
             catch
@@ -65,7 +71,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 CurrentMergeProcess.Cancel();
                 CurrentMergeProcess = null;
-                OnMergeProcessChanged?.Invoke();
+                TriggerStateChangeEvent();
             }
         }
 
@@ -76,7 +82,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 CurrentMergeProcess.Finish();
                 CurrentMergeProcess = null;
-                OnMergeProcessChanged?.Invoke();
+                TriggerStateChangeEvent();
             }
         }
 
@@ -86,7 +92,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             vcs.CheckoutOurs(path);
             EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using our version of\n{path}...", 0.5f);
             vcs.MarkAsMerged(path);
-            OnMergeProcessChanged?.Invoke();
+            OnStateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
         }
 
@@ -96,13 +102,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             vcs.CheckoutTheirs(path);
             EditorUtility.DisplayProgressBar(DialogConstants.title, $"Using their version of\n{path}...", 0.5f);
             vcs.MarkAsMerged(path);
-            OnMergeProcessChanged?.Invoke();
+            OnStateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
         }
 
-        public static void UpdateAfterMergeStateChange()
+        public static void TriggerStateChangeEvent()
         {
-            OnMergeStateChanged?.Invoke();
+            OnStateChanged?.Invoke();
         }
 
         private static void OnSceneUnloaded(Scene scene)

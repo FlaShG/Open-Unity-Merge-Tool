@@ -37,15 +37,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             mergeTab = new MergeTab();
 
             RefreshUI();
-            MergeTool.OnMergeProcessChanged += RefreshUI;
-            MergeTool.OnMergeStateChanged += RefreshUI;
+            MergeTool.OnStateChanged += RefreshUI;
             EditorApplication.focusChanged += OnApplicationFocusChanged;
         }
 
         private void OnDestroy()
         {
-            MergeTool.OnMergeProcessChanged -= RefreshUI;
-            MergeTool.OnMergeStateChanged -= RefreshUI;
+            MergeTool.OnStateChanged -= RefreshUI;
             EditorApplication.focusChanged -= OnApplicationFocusChanged;
         }
 

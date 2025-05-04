@@ -237,13 +237,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void UseOurs()
         {
             currentContainer.UseOurs();
-            MergeTool.UpdateAfterMergeStateChange();
+            MergeTool.TriggerStateChangeEvent();
         }
 
         private void UseTheirs()
         {
             currentContainer.UseTheirs();
-            MergeTool.UpdateAfterMergeStateChange();
+            MergeTool.TriggerStateChangeEvent();
         }
     }
 }

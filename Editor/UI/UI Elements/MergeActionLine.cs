@@ -166,7 +166,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void SendUpdateEvent()
         {
-            MergeTool.UpdateAfterMergeStateChange();
+            MergeTool.TriggerStateChangeEvent();
         }
     }
 }
