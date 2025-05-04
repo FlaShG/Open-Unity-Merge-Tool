@@ -55,7 +55,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             var padding = new VisualElement();
             padding.style.flexDirection = FlexDirection.Row;
-            padding.style.SetPadding(6);
+            padding.style.SetPadding(8);
             line.Add(padding);
 
             var icon = new Image();
@@ -75,6 +75,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
             button.text = "Start Merging";
             button.SetButtonColor(StyleConstants.MergedColor);
             line.Add(button);
+
+            var separator = new Label("|");
+            separator.style.SetPadding(9);
+            line.Add(separator);
+
+            var useOursButton = new Button(() => MergeTool.UseOurs(path));
+            useOursButton.text = "Use\nOurs";
+            useOursButton.style.fontSize = 11;
+            useOursButton.style.width = 45;
+            line.Add(useOursButton);
+
+            var useTheirsButton = new Button(() => MergeTool.UseTheirs(path));
+            useTheirsButton.text = "Use\nTheirs";
+            useTheirsButton.style.fontSize = 11;
+            useTheirsButton.style.width = 45;
+            line.Add(useTheirsButton);
 
             return line;
         }
