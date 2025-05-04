@@ -3,13 +3,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     [VCSInfo("Git")]
     public class VCSGit : VersionControlSystem
     {
-        private string command
-        {
-            get
-            {
-                return "git";
-            }
-        }
+        private const string command = "git";
 
         protected internal override Status GetStatus()
         {
