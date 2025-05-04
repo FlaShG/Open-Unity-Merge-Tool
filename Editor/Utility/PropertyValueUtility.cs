@@ -1,10 +1,17 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
+    using UnityEditor;
     using UnityEngine;
     using UnityEngine.UIElements;
 
-    internal static class PropertyValuePreviewFactory
+    internal static class PropertyValueUtility
     {
+        public static bool CanShowPropertyField(IMergeable mergeable)
+        {
+            return mergeable.SerializedProperty != null &&
+                mergeable.SerializedProperty.propertyType != SerializedPropertyType.Generic;
+        }
+
         public static VisualElement GetPreview(object obj)
         {
             if (obj is string s)

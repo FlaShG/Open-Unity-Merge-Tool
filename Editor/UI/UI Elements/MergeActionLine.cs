@@ -46,9 +46,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             Add(line);
 
+            var canShowPropertyField = PropertyValueUtility.CanShowPropertyField(mergeable);
             if (mergeable.SerializedProperty != null)
             {
-                line.Add(new PropertyField(mergeable, SendUpdateEvent));
+                if (canShowPropertyField)
+                {
+                    line.Add(new PropertyField(mergeable, SendUpdateEvent));
+                }
+                else
+                {
+                    var label = new Label(mergeable.Title.text);
+                    label.style.SetPadding(3);
+                    line.Add(label);
+                    line.Add(new HorizontalSpacer());
+                }
             }
             else
             {
@@ -77,9 +88,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 {
                     applyOursButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
                 }
-                if (mergeable.OurValue != null)
+                if (canShowPropertyField && mergeable.OurValue != null)
                 {
-                    var ourValuePreview = PropertyValuePreviewFactory.GetPreview(mergeable.OurValue);
+                    var ourValuePreview = PropertyValueUtility.GetPreview(mergeable.OurValue);
                     ourValuePreview.style.flexGrow = 1;
                     applyOursButton.Add(ourValuePreview);
                 }
@@ -95,9 +106,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 {
                     applyTheirsButton.style.SetBorder(1.5f, StyleConstants.PrefabColor);
                 }
-                if (mergeable.TheirValue != null)
+                if (canShowPropertyField && mergeable.TheirValue != null)
                 {
-                    var theirValuePreview = PropertyValuePreviewFactory.GetPreview(mergeable.TheirValue);
+                    var theirValuePreview = PropertyValueUtility.GetPreview(mergeable.TheirValue);
                     theirValuePreview.style.flexGrow = 1;
                     applyTheirsButton.Add(theirValuePreview);
                 }

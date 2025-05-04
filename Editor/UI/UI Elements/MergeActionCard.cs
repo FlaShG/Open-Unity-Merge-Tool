@@ -4,8 +4,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEngine.UIElements;
 
     /// <summary>
-    /// UI represantation of a single component or GameObject.<br/>
-    /// Contains one or more <see cref="MergeActionLine"/>s that represent the conflicts with that object.
+    /// UI representation of a single component, or the only action available for an added or removed GameObject.<br/>
+    /// Contains one or more <see cref="MergeActionLine"/>s that represent the conflicts found within that object.
     /// </summary>
     internal class MergeActionCard : VisualElement
     {
