@@ -181,17 +181,25 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             if (container == currentContainer) return;
 
-            currentContainerIndex = MergeTool.CurrentMergeProcess.MergeActionContainers.IndexOf(container);
             currentContainer = container;
+            currentContainerIndex = container == null ? 0 : MergeTool.CurrentMergeProcess.MergeActionContainers.IndexOf(container);
 
-            gameObjectLabel.text = currentContainer.TargetGameObject.name;
             scrollView.Clear();
-            foreach (var mergeAction in currentContainer.MergeActions)
-            {
-                scrollView.Add(new MergeActionCard(mergeAction));
-            }
 
-            applyButtonsUI.style.SetVisible(currentContainer.MergeActions.Count > 1);
+            if (container != null)
+            {
+                gameObjectLabel.text = container.TargetGameObject.name;
+                foreach (var mergeAction in container.MergeActions)
+                {
+                    scrollView.Add(new MergeActionCard(mergeAction));
+                }
+
+                applyButtonsUI.style.SetVisible(container.MergeActions.Count > 1);
+            }
+            else
+            {
+                applyButtonsUI.style.SetVisible(false);
+            }
         }
 
         private void ShowCurrentContainer()
