@@ -52,18 +52,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void AddVCSDropdownButton()
         {
             var line = new HorizontalLayout();
+            Add(line);
+
             line.Add(new Label("Version control system:"));
 
             vcsDropdownButton = new Button();
-            vcsDropdownButton.style.flexGrow = 1;
             vcsDropdownButton.enabledSelf = MergeTool.CurrentMergeProcess == null;
             vcsDropdownButton.clicked += () =>
             {
-                this.vcsDropdown.DropDown(vcsDropdownButton.worldBound, vcsDropdownButton, false);
+                vcsDropdown.DropDown(vcsDropdownButton.worldBound, vcsDropdownButton, false);
             };
             line.Add(vcsDropdownButton);
 
-            Add(line);
+            line.Add(new HorizontalSpacer());
         }
 
         private void AddStatusLabel()
