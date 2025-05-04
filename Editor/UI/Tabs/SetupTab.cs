@@ -6,34 +6,34 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
     internal class SetupTab : MergeToolTab
     {
+        private GenericDropdownMenu vcsDropdown;
+
         protected override void CreateGUI()
         {
-            AddVCSDropdown();
+            AddVCSDropdownButton();
             AddStatusLabel();
         }
 
         public override void UpdateContent()
         {
-            
-        }
-
-        private void AddVCSDropdown()
-        {
-            var line = new HorizontalLayout();
-            line.Add(new Label("Version control system:"));
-
-            var dropdown = new GenericDropdownMenu();
+            vcsDropdown = new GenericDropdownMenu();
             var availableSystems = TypeCache.GetTypesDerivedFrom<VersionControlSystem>();
             foreach (var vcsType in availableSystems)
             {
-                dropdown.AddItem(VersionControlSystem.GetTitle(vcsType),
+                vcsDropdown.AddItem(VersionControlSystem.GetTitle(vcsType),
                     MergeTool.Vcs?.GetType() == vcsType,
                     () =>
                     {
                         MergeTool.Vcs = (VersionControlSystem)Activator.CreateInstance(vcsType);
-                        UpdateContent();
+                        MergeTool.TriggerStateChangeEvent();
                     });
             }
+        }
+
+        private void AddVCSDropdownButton()
+        {
+            var line = new HorizontalLayout();
+            line.Add(new Label("Version control system:"));
 
             var button = new Button();
             button.style.flexGrow = 1;
@@ -41,7 +41,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             button.enabledSelf = MergeTool.CurrentMergeProcess == null;
             button.clicked += () =>
             {
-                dropdown.DropDown(button.worldBound, button, true, true);
+                this.vcsDropdown.DropDown(button.worldBound, button, true, true);
             };
             line.Add(button);
 

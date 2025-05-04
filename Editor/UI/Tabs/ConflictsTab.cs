@@ -18,6 +18,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void BuildConflictList()
         {
+            if (MergeTool.Vcs == null) return;
+
             var unmergedPaths = MergeTool.Vcs.GetAllUnmergedPaths();
 
             var scrollView = new ScrollView(ScrollViewMode.Vertical);
