@@ -29,24 +29,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public static Component AddComponent(this GameObject gameObject, Component original)
         {
             var newComponent = gameObject.AddComponent(original.GetType());
-
-            using var originalSerializedObject = new SerializedObject(original);
-            using var originalProperty = originalSerializedObject.GetIterator();
-            using var newSerializedObject = new SerializedObject(newComponent);
-            using var newProperty = newSerializedObject.GetIterator();
-
-            if (originalProperty.Next(true))
-            {
-                newProperty.Next(true);
-
-                while (originalProperty.NextVisible(true))
-                {
-                    newProperty.NextVisible(true);
-                    newProperty.SetValue(originalProperty.GetValue());
-                }
-            }
-
-            newSerializedObject.ApplyModifiedProperties();
+            EditorUtility.CopySerialized(original, newComponent);
 
             return newComponent;
         }
