@@ -39,9 +39,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static readonly TimeValue TransitionDuration = new TimeValue(0.15f, TimeUnit.Second);
 
-        public static Color GetColorFor(DecisionState resolution)
+        public static Color GetColorFor(DecisionState decision)
         {
-            switch (resolution)
+            switch (decision)
             {
                 case DecisionState.Complete:
                     return Colors.Merged;
