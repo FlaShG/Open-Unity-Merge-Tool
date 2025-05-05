@@ -49,7 +49,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void OnApplicationFocusChanged(bool focus)
         {
-            if (focus)
+            if (focus && !IsSelected(mergeTab))
             {
                 RefreshUI();
             }
