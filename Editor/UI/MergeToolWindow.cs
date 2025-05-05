@@ -75,8 +75,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void SelectTab(MergeToolTab tab)
         {
             tab.UpdateContent();
-            tabContent.Clear();
-            tabContent.Add(tab);
+            if (!tabContent.Contains(tab))
+            {
+                tabContent.Clear();
+                tabContent.Add(tab);
+            }
         }
 
         private bool IsSelected(MergeToolTab tab)
