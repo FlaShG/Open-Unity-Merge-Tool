@@ -9,6 +9,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public static class Icons
         {
             public static Texture GameObject => GetEditorIcon("d_GameObject Icon", "GameObject Icon");
+            public static Texture Prefab => GetEditorIcon("d_Prefab Icon", "Prefab Icon");
 
             private static Texture GetEditorIcon(string id)
             {
@@ -30,8 +31,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public static readonly Color Automerged = GetThemedColor(new(0.35f, 0.35f, 0.25f), new(0.75f, 0.75f, 0.65f));
             public static readonly Color Merged = GetThemedColor(new(0.25f, 0.4f, 0.25f), new(0.6f, 0.75f, 0.6f));
 
-            // (0.3f, 0.7f, 1f) would be much nicer, but that collides with the default :active color
-            public static readonly Color PrefabConnection = GetThemedColor(new(0f, 0f, 0.4f), new(0.6f, 0.6f, 1f));
             public static readonly Color Highlight = GetThemedColor(new(1f, 0.6f, 0f), new(1f, 0.4f, 0f));
 
             public static readonly Color LightText = GetThemedColor(new(0.5f, 0.5f, 0.5f), new(0.3f, 0.3f, 0.3f));

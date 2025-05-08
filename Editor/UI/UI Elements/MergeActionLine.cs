@@ -86,7 +86,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 applyOursButton = new Button(UseOurs);
                 if (mergeable.OurValueIsPrefabDefault)
                 {
-                    applyOursButton.style.SetBorder(1.5f, StyleConstants.Colors.PrefabConnection);
+                    applyOursButton.AddButtonIcon(StyleConstants.Icons.Prefab);
                 }
                 if (canShowPropertyField && mergeable.OurValue != null)
                 {
@@ -104,7 +104,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 applyTheirsButton = new Button(UseTheirs);
                 if (mergeable.TheirValueIsPrefabDefault)
                 {
-                    applyTheirsButton.style.SetBorder(1.5f, StyleConstants.Colors.PrefabConnection);
+                    applyOursButton.AddButtonIcon(StyleConstants.Icons.Prefab);
                 }
                 if (canShowPropertyField && mergeable.TheirValue != null)
                 {

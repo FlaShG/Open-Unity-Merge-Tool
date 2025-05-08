@@ -66,6 +66,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.borderRightWidth = width;
         }
 
+        public static void AddButtonIcon(this Button button, Texture icon)
+        {
+            button.style.flexDirection = FlexDirection.Row;
+
+            var image = new Image();
+            image.image = icon;
+            image.style.SetSize(16, 16);
+            image.style.flexShrink = 0;
+            button.Add(image);
+        }
+
         public static void EnableBackgroundTransitions(this IStyle style)
         {
             style.transitionProperty = new List<StylePropertyName> { "background-color" };
