@@ -92,5 +92,23 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             return sb.ToString();
         }
+
+        /// <summary>
+        /// Returns whether <paramref name="potentialParent"/> is an parent (direct or indirect) of the GameObject.
+        /// </summary>
+        public static bool HasParent(this GameObject gameObject, GameObject potentialParent)
+        {
+            var transform = gameObject.transform;
+            do
+            {
+                transform = transform.parent;
+                if (transform != null && transform.gameObject == potentialParent)
+                {
+                    return true;
+                }
+            }
+            while (transform != null);
+            return false;
+        }
     }
 }

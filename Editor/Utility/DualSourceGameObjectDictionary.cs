@@ -53,23 +53,49 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             var result = new List<GameObjectMergeActionContainer>();
 
+            GameObject deletedPotentialParent = null;
+
             foreach (var ourObject in ourObjects)
             {
+                if (deletedPotentialParent && ourObject.Value.HasParent(deletedPotentialParent))
+                {
+                    continue;
+                }
+
+                deletedPotentialParent = null;
+
                 var container = new GameObjectMergeActionContainer(ourObject.Value, theirObjects.GetOptional(ourObject.Key));
                 if (container.HasActions)
                 {
                     result.Add(container);
+                    if (container.IsRelatedToGameObjectExistence)
+                    {
+                        deletedPotentialParent = ourObject.Value;
+                    }
                 }
             }
 
+            deletedPotentialParent = null;
+
             foreach (var theirObject in theirObjects)
             {
+                if (deletedPotentialParent && theirObject.Value.HasParent(deletedPotentialParent))
+                {
+                    continue;
+                }
+
+                deletedPotentialParent = null;
+
                 if (!ourObjects.ContainsKey(theirObject.Key))
                 {
                     var container = new GameObjectMergeActionContainer(null, theirObject.Value);
                     if (container.HasActions)
                     {
                         result.Add(container);
+                        if (container.IsRelatedToGameObjectExistence)
+                        {
+                            deletedPotentialParent = theirObject.Value;
+                        }
                     }
                 }
                 theirObject.Value.SetActiveForMerging(false);

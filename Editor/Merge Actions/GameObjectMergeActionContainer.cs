@@ -18,6 +18,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public bool IsCompleted => mergeActions.All(action => action.DecisionState == DecisionState.Complete);
         public bool HasIncompleteActions => mergeActions.Any(action => action.DecisionState == DecisionState.Incomplete);
         public GameObject TargetGameObject => ourGameObject;
+        public bool IsRelatedToGameObjectExistence { get; private set; }
 
         private readonly GameObject ourGameObject;
         private readonly GameObject theirGameObject;
@@ -36,11 +37,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 Name = ourGameObject.GetPath();
                 mergeActions.Add(new MergeActionOurGameObject(ourGameObject));
+                IsRelatedToGameObjectExistence = true;
             }
             else if (theirGameObject && !ourGameObject)
             {
                 Name = theirGameObject.GetPath();
                 mergeActions.Add(new MergeActionTheirGameObject(theirGameObject));
+                IsRelatedToGameObjectExistence = true;
             }
             else
             {
@@ -48,8 +51,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 FindComponentDifferences();
                 FindGameObjectPropertyDifferences();
             }
-
-            // TODO CheckIfMerged
         }
 
         public void UseOurs()

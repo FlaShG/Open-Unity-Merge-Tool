@@ -74,6 +74,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
             EditorUtility.ClearProgressBar();
         }
 
+        /// <summary>
+        /// Returns all objects in the given <paramref name="scene"/> in the hierarchy order.
+        /// Guarantees that child GameObjects come after their parents.
+        /// </summary>
         private static IEnumerable<GameObject> GetAllSceneObjects(Scene scene)
         {
             var result = new List<GameObject>();
