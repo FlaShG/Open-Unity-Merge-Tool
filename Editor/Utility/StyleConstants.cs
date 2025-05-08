@@ -8,10 +8,16 @@ namespace ThirteenPixels.OpenUnityMergeTool
     {
         public static class Icons
         {
-            public static Texture GameObject => GetEditorIcon("GameObject Icon");
+            public static Texture GameObject => GetEditorIcon("d_GameObject Icon", "GameObject Icon");
 
             private static Texture GetEditorIcon(string id)
             {
+                return EditorGUIUtility.IconContent(id).image;
+            }
+
+            private static Texture GetEditorIcon(string darkId, string lightId)
+            {
+                var id = EditorGUIUtility.isProSkin ? darkId : lightId;
                 return EditorGUIUtility.IconContent(id).image;
             }
         }
