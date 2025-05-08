@@ -21,7 +21,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public static readonly Color BackgroundLine = GetThemedColor(new(0f, 0f, 0f, 0.3f), new(1f, 1f, 1f, 0.3f));
 
             public static readonly Color Unmerged = GetThemedColor(new(0.4f, 0.25f, 0.25f), new(0.75f, 0.6f, 0.6f));
-            public static readonly Color Automerged = GetThemedColor(new(0.25f, 0.35f, 0.35f), new(0.65f, 0.75f, 0.75f));
+            public static readonly Color Automerged = GetThemedColor(new(0.35f, 0.35f, 0.25f), new(0.75f, 0.75f, 0.65f));
             public static readonly Color Merged = GetThemedColor(new(0.25f, 0.4f, 0.25f), new(0.6f, 0.75f, 0.6f));
 
             // (0.3f, 0.7f, 1f) would be much nicer, but that collides with the default :active color

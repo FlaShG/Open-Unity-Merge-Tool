@@ -56,5 +56,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
         protected abstract void ApplyOurs();
 
         protected abstract void ApplyTheirs();
+
+        protected void SetAsAutoCompleted()
+        {
+            DecisionState = DecisionState.AutoCompleted;
+        }
     }
 }
