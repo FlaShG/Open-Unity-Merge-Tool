@@ -6,7 +6,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEngine.SceneManagement;
     using UnityEditor.SceneManagement;
     using System.Collections.Generic;
-    using System.Linq;
 
     internal class SceneMergeProcess : MergeProcess
     {
@@ -75,10 +74,28 @@ namespace ThirteenPixels.OpenUnityMergeTool
             EditorUtility.ClearProgressBar();
         }
 
-        private static HashSet<GameObject> GetAllSceneObjects(Scene scene)
+        private static IEnumerable<GameObject> GetAllSceneObjects(Scene scene)
         {
-            var objects = Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            return new HashSet<GameObject>(objects.Where(gameObject => gameObject.scene == scene));
+            var result = new List<GameObject>();
+            scene.GetRootGameObjects(result);
+
+            for (var index = 0; index < result.Count; index++)
+            {
+                AddAllChildren(result, ref index);
+            }
+
+            return result;
+        }
+
+        private static void AddAllChildren(List<GameObject> result, ref int index)
+        {
+            var root = result[index];
+            foreach (Transform child in root.transform)
+            {
+                index++;
+                result.Insert(index, child.gameObject);
+                AddAllChildren(result, ref index);
+            }
         }
     }
 }
