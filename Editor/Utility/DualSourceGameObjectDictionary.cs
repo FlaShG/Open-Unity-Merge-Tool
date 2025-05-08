@@ -49,6 +49,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        public GameObject GetOurEquivalentToTheir(GameObject gameObject)
+        {
+            if (gameObject == null) return null;
+
+            var id = ObjectId.GetFor(gameObject);
+            return ourObjects.GetOptional(id);
+        }
+
         public List<GameObjectMergeActionContainer> GenerateMergeActions()
         {
             var result = new List<GameObjectMergeActionContainer>();
@@ -64,7 +72,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 deletedPotentialParent = null;
 
-                var container = new GameObjectMergeActionContainer(ourObject.Value, theirObjects.GetOptional(ourObject.Key));
+                var container = new GameObjectMergeActionContainer(this, ourObject.Value, theirObjects.GetOptional(ourObject.Key));
                 if (container.HasActions)
                 {
                     result.Add(container);
@@ -88,7 +96,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 if (!ourObjects.ContainsKey(theirObject.Key))
                 {
-                    var container = new GameObjectMergeActionContainer(null, theirObject.Value);
+                    var container = new GameObjectMergeActionContainer(this, null, theirObject.Value);
                     if (container.HasActions)
                     {
                         result.Add(container);

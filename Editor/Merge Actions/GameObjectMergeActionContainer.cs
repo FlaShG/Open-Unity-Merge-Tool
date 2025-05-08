@@ -25,7 +25,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private readonly List<MergeAction> mergeActions;
 
 
-        public GameObjectMergeActionContainer(GameObject ourGameObject, GameObject theirGameObject)
+        public GameObjectMergeActionContainer(DualSourceGameObjectDictionary dictionary,
+            GameObject ourGameObject,
+            GameObject theirGameObject)
         {
             this.ourGameObject = ourGameObject;
             this.theirGameObject = theirGameObject;
@@ -48,8 +50,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
             else
             {
                 Name = ourGameObject.GetPath();
-                FindComponentDifferences();
+                FindParentDifference(dictionary);
                 FindGameObjectPropertyDifferences();
+                FindComponentDifferences();
             }
         }
 
@@ -74,6 +77,26 @@ namespace ThirteenPixels.OpenUnityMergeTool
             FindPropertyDifferences(ourGameObject, theirGameObject);
         }
 
+        private void FindParentDifference(DualSourceGameObjectDictionary dictionary)
+        {
+            var ourParent = ourGameObject.transform.parent;
+
+            Transform theirParent = null;
+            if (theirGameObject.transform.parent != null)
+            {
+                theirParent = dictionary.GetOurEquivalentToTheir(theirGameObject.transform.parent.gameObject).transform;
+            }
+
+            if (ourParent != theirParent)
+            {
+                mergeActions.Add(new MergeActionParent(ourGameObject,
+                    ourParent,
+                    ourGameObject.transform.GetSiblingIndex(),
+                    theirParent,
+                    theirGameObject.transform.GetSiblingIndex()));
+            }
+        }
+
         private void FindComponentDifferences()
         {
             var ourComponents = ourGameObject.GetComponents<Component>();
@@ -94,7 +117,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var id = ObjectId.GetFor(ourComponent);
                 if (theirComponents.TryGetValue(id, out var theirComponent))
                 {
-                    var id2 = ObjectId.GetFor(theirComponent);
                     // Component exists in both versions.
                     FindPropertyDifferences(ourComponent, theirComponent);
                     theirComponents.Remove(id);

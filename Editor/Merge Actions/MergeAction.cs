@@ -11,8 +11,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public virtual ReadOnlyCollection<IMergeable> Children => null;
         public SerializedProperty SerializedProperty => null;
-        public virtual string ApplyOursButtonLabel => ">>>";
-        public virtual string ApplyTheirsButtonLabel => "<<<";
+        public virtual string ApplyOursButtonLabel => "Apply ours";
+        public virtual string ApplyTheirsButtonLabel => "Apply theirs";
         public virtual object OurValue => null;
         public virtual object TheirValue => null;
         public abstract bool IsUsingOurs { get; }

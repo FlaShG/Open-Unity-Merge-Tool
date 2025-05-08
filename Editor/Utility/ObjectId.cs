@@ -45,6 +45,16 @@ namespace ThirteenPixels.OpenUnityMergeTool
             return "[" + id + (prefabId != 0 ? "/" + prefabId : "") + "]";
         }
 
+        public static bool operator ==(ObjectId a, ObjectId b)
+        {
+            return Equals(a, b);
+        }
+
+        public static bool operator !=(ObjectId a, ObjectId b)
+        {
+            return !Equals(a, b);
+        }
+
         public static ObjectId GetFor(GameObject gameObject)
         {
             if (!TryGetIds(gameObject, out var id, out var prefabId) && backupMapping != null)
