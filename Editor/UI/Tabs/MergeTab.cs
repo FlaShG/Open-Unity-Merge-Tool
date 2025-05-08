@@ -72,16 +72,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     ShowCurrentContainer();
                 }
 
-                pickGameObjectDropdown = new GenericDropdownMenu();
-                foreach (var container in MergeTool.CurrentMergeProcess.MergeActionContainers)
-                {
-                    pickGameObjectDropdown.AddItem(container.Name,
-                        container.IsCompleted,
-                        () =>
-                        {
-                            ShowContainer(container);
-                        });
-                }
+                BuildPickObjectDropdown();
             }
         }
 
@@ -246,6 +237,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void UpdateCards()
         {
             scrollView.Query<MergeActionCard>().ForEach(card => card.UpdateContent());
+        }
+
+        private void BuildPickObjectDropdown()
+        {
+            pickGameObjectDropdown = new GenericDropdownMenu();
+            foreach (var container in MergeTool.CurrentMergeProcess.MergeActionContainers)
+            {
+                pickGameObjectDropdown.AddItem(container.Name,
+                    container.IsCompleted,
+                    () =>
+                    {
+                        ShowContainer(container);
+                    });
+            }
         }
 
         private void CancelCurrentMergeProgress()
