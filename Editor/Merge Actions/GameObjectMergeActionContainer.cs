@@ -69,6 +69,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        private void FindGameObjectPropertyDifferences()
+        {
+            FindPropertyDifferences(ourGameObject, theirGameObject);
+        }
+
         private void FindComponentDifferences()
         {
             var ourComponents = ourGameObject.GetComponents<Component>();
@@ -108,12 +113,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        private void FindGameObjectPropertyDifferences()
-        {
-            // TODO Check for parent?
-            FindPropertyDifferences(ourGameObject, theirGameObject);
-        }
-
         private void FindPropertyDifferences(UnityObject ours, UnityObject theirs)
         {
             if (ours.GetType() != theirs.GetType())
@@ -134,10 +133,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 var shouldEnterChildren = ourProperty.hasVisibleChildren;
 
-                while (ourProperty.NextVisible(shouldEnterChildren))
+                do
                 {
-                    theirProperty.NextVisible(shouldEnterChildren);
-
                     if (DifferentValues(ourProperty, theirProperty))
                     {
                         mergeAction ??= new MergeActionPropertyValues(ours);
@@ -146,7 +143,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     }
 
                     shouldEnterChildren = ShouldEnterChildren(ourProperty);
+                    theirProperty.NextVisible(shouldEnterChildren);
                 }
+                while (ourProperty.NextVisible(shouldEnterChildren));
             }
             
             if (mergeAction != null)
@@ -169,7 +168,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             if (!ourProperty.IsRealArray())
             {
-                return DifferentValuesFlat(ourProperty, theirProperty);
+                return !ourProperty.HasSameValueAs(theirProperty);
             }
             else
             {
@@ -192,7 +191,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     op.Next(false);
                     tp.Next(false);
 
-                    if (DifferentValuesFlat(op, tp))
+                    if (!op.HasSameValueAs(tp))
                     {
                         return true;
                     }
@@ -200,29 +199,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             return false;
-        }
-
-        private static bool DifferentValuesFlat(SerializedProperty ourProperty, SerializedProperty theirProperty)
-        {
-            if (ourProperty.IsPrefabDefault() != theirProperty.IsPrefabDefault())
-            {
-                return true;
-            }
-
-            if (ourProperty.propertyType == SerializedPropertyType.ObjectReference)
-            {
-                var our = ourProperty.GetValue();
-                var their = theirProperty.GetValue();
-
-                if (our != null && their != null)
-                {
-                    our = ObjectId.GetFor(our as UnityObject);
-                    their = ObjectId.GetFor(their as UnityObject);
-                }
-                return !Equals(our, their);
-            }
-
-            return !SerializedProperty.DataEquals(ourProperty, theirProperty);
         }
 
         private bool ShouldEnterChildren(SerializedProperty serializedProperty)

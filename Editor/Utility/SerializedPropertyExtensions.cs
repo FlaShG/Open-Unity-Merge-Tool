@@ -1,6 +1,7 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor;
+    using UnityObject = UnityEngine.Object;
 
     internal static class SerializedPropertyExtensions
     {
@@ -69,6 +70,29 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 property.boxedValue = value;
             }
             property.serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        public static bool HasSameValueAs(this SerializedProperty ourProperty, SerializedProperty theirProperty)
+        {
+            if (ourProperty.IsPrefabDefault() != theirProperty.IsPrefabDefault())
+            {
+                return false;
+            }
+
+            if (ourProperty.propertyType == SerializedPropertyType.ObjectReference)
+            {
+                var our = ourProperty.GetValue();
+                var their = theirProperty.GetValue();
+
+                if (our != null && their != null)
+                {
+                    our = ObjectId.GetFor(our as UnityObject);
+                    their = ObjectId.GetFor(their as UnityObject);
+                }
+                return Equals(our, their);
+            }
+
+            return SerializedProperty.DataEquals(ourProperty, theirProperty);
         }
 
         public static bool IsPrefabDefault(this SerializedProperty property)
