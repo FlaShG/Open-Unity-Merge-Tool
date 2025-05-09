@@ -43,12 +43,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var theirScene = EditorSceneManager.OpenScene(FileUtility.AttachSuffix(path, theirsSuffix), OpenSceneMode.Additive);
             var theirObjects = GetAllSceneObjects(theirScene);
             gameObjectDictionary.AddTheirObjects(theirObjects);
-            EditorSceneManager.MergeScenes(theirScene, ourScene);
 
             DisplayProgressBar(4);
             var mergeActions = gameObjectDictionary.GenerateMergeActions();
 
             DisplayProgressBar(5);
+            EditorSceneManager.MergeScenes(theirScene, ourScene);
             Cleanup();
 
             return mergeActions;
