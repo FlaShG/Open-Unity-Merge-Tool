@@ -157,7 +157,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 do
                 {
-                    if (DifferentValues(ourProperty, theirProperty))
+                    if (HaveDifferentValues(ourProperty, theirProperty))
                     {
                         mergeAction ??= new MergeActionPropertyValues(ours);
 
@@ -186,37 +186,41 @@ namespace ThirteenPixels.OpenUnityMergeTool
         /// <summary>
         /// Returns true when the two properties have different values, false otherwise.
         /// </summary>
-        private static bool DifferentValues(SerializedProperty ourProperty, SerializedProperty theirProperty)
+        private static bool HaveDifferentValues(SerializedProperty ourProperty, SerializedProperty theirProperty)
         {
-            if (!ourProperty.IsRealArray())
+            if (ourProperty.IsRealArray())
             {
-                return !ourProperty.HasSameValueAs(theirProperty);
+                return HaveDifferentArrayValues(ourProperty, theirProperty);
             }
             else
             {
-                if (ourProperty.arraySize != theirProperty.arraySize)
+                return !ourProperty.HasSameValueAs(theirProperty);
+            }
+        }
+
+        private static bool HaveDifferentArrayValues(SerializedProperty ourProperty, SerializedProperty theirProperty)
+        {
+            if (ourProperty.arraySize != theirProperty.arraySize)
+            {
+                return true;
+            }
+            using var op = ourProperty.Copy();
+            using var tp = theirProperty.Copy();
+
+            // Enter, then skip past the arraySize property, onto the [0] element.
+            op.Next(true);
+            op.Next(true);
+            tp.Next(true);
+            tp.Next(true);
+
+            for (int i = 0; i < ourProperty.arraySize; ++i)
+            {
+                op.Next(false);
+                tp.Next(false);
+
+                if (!op.HasSameValueAs(tp))
                 {
                     return true;
-                }
-
-                using var op = ourProperty.Copy();
-                using var tp = theirProperty.Copy();
-
-                // Enter, then skip past the arraySize property, onto the [0] element.
-                op.Next(true);
-                op.Next(true);
-                tp.Next(true);
-                tp.Next(true);
-
-                for (int i = 0; i < ourProperty.arraySize; ++i)
-                {
-                    op.Next(false);
-                    tp.Next(false);
-
-                    if (!op.HasSameValueAs(tp))
-                    {
-                        return true;
-                    }
                 }
             }
 
