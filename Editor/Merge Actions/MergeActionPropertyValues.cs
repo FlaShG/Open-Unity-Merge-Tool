@@ -139,12 +139,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public void UseOurs()
             {
                 target.SetEnabled(ourValue);
+                EditorRepainter.RepaintInspector();
                 DecisionState = DecisionState.Complete;
             }
 
             public void UseTheirs()
             {
                 target.SetEnabled(theirValue);
+                EditorRepainter.RepaintInspector();
                 DecisionState = DecisionState.Complete;
             }
         }
@@ -204,17 +206,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         protected override void ApplyOurs()
         {
-            foreach (var property in properties)
+            // Do it backwards so the enabled entry comes last, if there is one.
+            // Updating the SerializedObject after updating the enabled property causes issues.
+            for (var index = properties.Count - 1; index >= 0; index--)
             {
-                property.UseOurs();
+                properties[index].UseOurs();
             }
         }
 
         protected override void ApplyTheirs()
         {
-            foreach (var property in properties)
+            // Do it backwards so the enabled entry comes last, if there is one.
+            // Updating the SerializedObject after updating the enabled property causes issues.
+            for (var index = properties.Count - 1; index >= 0; index--)
             {
-                property.UseTheirs();
+                properties[index].UseTheirs();
             }
         }
     }
