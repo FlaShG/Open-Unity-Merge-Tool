@@ -40,7 +40,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 throw new MergeProcessException("Unsaved changes in an open scene.");
             }
 
-            if (MergeActionContainers == null)
+            if (MergeActionContainers == null || MergeActionContainers.Count == 0)
             {
                 throw new MergeProcessException("Merge Actions were not generated.");
             }
