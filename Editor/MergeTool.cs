@@ -30,7 +30,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static MergeProcess CurrentMergeProcess { get; private set; }
 
-        public static event Action OnStateChanged;
+        public static event Action StateChanged;
 
         [InitializeOnLoadMethod]
         private static void Initialize()
@@ -93,7 +93,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             vcs.CheckoutOurs(path);
             EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
             vcs.MarkAsMerged(path);
-            OnStateChanged?.Invoke();
+            StateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
         }
 
@@ -104,13 +104,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             vcs.CheckoutTheirs(path);
             EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
             vcs.MarkAsMerged(path);
-            OnStateChanged?.Invoke();
+            StateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
         }
 
         public static void TriggerStateChangeEvent()
         {
-            OnStateChanged?.Invoke();
+            StateChanged?.Invoke();
         }
 
         private static void OnSceneUnloaded(Scene scene)

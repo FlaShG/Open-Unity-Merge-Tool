@@ -32,18 +32,18 @@ namespace ThirteenPixels.OpenUnityMergeTool
             tabContent.style.SetPadding(6, 4, 4, 2);
             root.Add(tabContent);
 
-            setupTab = new SetupTab();
+            setupTab = new SetupTab(OpenConflictsTab);
             conflictsTab = new ConflictsTab();
             mergeTab = new MergeTab();
 
             RefreshUI();
-            MergeTool.OnStateChanged += RefreshUI;
+            MergeTool.StateChanged += RefreshUI;
             EditorApplication.focusChanged += OnApplicationFocusChanged;
         }
 
         private void OnDestroy()
         {
-            MergeTool.OnStateChanged -= RefreshUI;
+            MergeTool.StateChanged -= RefreshUI;
             EditorApplication.focusChanged -= OnApplicationFocusChanged;
         }
 
@@ -63,8 +63,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
             else if (MergeTool.CurrentMergeProcess == null)
             {
-                mergeTab.UpdateContent();
-                SelectTab(conflictsTab);
+                OpenConflictsTab();
             }
             else
             {
@@ -95,6 +94,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private void OpenSettings()
         {
             SelectTab(setupTab);
+        }
+
+        private void OpenConflictsTab()
+        {
+            mergeTab?.UpdateContent();
+            SelectTab(conflictsTab);
         }
     }
 }
