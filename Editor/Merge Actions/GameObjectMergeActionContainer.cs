@@ -213,7 +213,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             tp.Next(true);
             tp.Next(true);
 
-            for (int i = 0; i < ourProperty.arraySize; ++i)
+            for (int i = 0; i < ourProperty.arraySize; i++)
             {
                 op.Next(false);
                 tp.Next(false);

@@ -38,11 +38,16 @@ namespace ThirteenPixels.OpenUnityMergeTool
             DisplayProgressBar(2.5f);
             var ourObjects = GetAllSceneObjects(ourScene);
             gameObjectDictionary.AddOurObjects(ourObjects);
+            // Deactivate all objects to prevent problems while loading the other versions in the next step.
+            // For example, NavMeshSurfaces are complaining if two of them reference the same NavMeshData.
+            var deactivatedObjects = Deactivate(ourObjects);
 
             DisplayProgressBar(3);
             var theirScene = EditorSceneManager.OpenScene(FileUtility.AttachSuffix(path, theirsSuffix), OpenSceneMode.Additive);
             var theirObjects = GetAllSceneObjects(theirScene);
             gameObjectDictionary.AddTheirObjects(theirObjects);
+
+            Activate(ourObjects, deactivatedObjects);
 
             DisplayProgressBar(4);
             var mergeActions = gameObjectDictionary.GenerateMergeActions();
@@ -52,6 +57,36 @@ namespace ThirteenPixels.OpenUnityMergeTool
             Cleanup();
 
             return mergeActions;
+        }
+
+        private static HashSet<GameObject> Deactivate(IEnumerable<GameObject> gameObjects)
+        {
+            var alreadyDeactivatedObjects = new HashSet<GameObject>();
+
+            foreach (var gameObject in gameObjects)
+            {
+                if (gameObject.activeSelf)
+                {
+                    gameObject.SetActive(false);
+                }
+                else
+                {
+                    alreadyDeactivatedObjects.Add(gameObject);
+                }
+            }
+
+            return alreadyDeactivatedObjects;
+        }
+
+        private void Activate(IEnumerable<GameObject> gameObjects, HashSet<GameObject> deactivatedObjects)
+        {
+            foreach (var gameObject in gameObjects)
+            {
+                if (!deactivatedObjects.Contains(gameObject))
+                {
+                    gameObject.SetActive(true);
+                }
+            }
         }
 
         protected override void CancelProcess()
