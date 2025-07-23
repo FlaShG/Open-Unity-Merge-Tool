@@ -1,6 +1,5 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
-    using UnityEngine;
     using System.ComponentModel;
     using System.Diagnostics;
     using System;
@@ -13,14 +12,36 @@ namespace ThirteenPixels.OpenUnityMergeTool
             VCSNotFound, NoRepo, Okay
         }
 
+        public readonly struct FilePath
+        {
+            public readonly string repositoryPath;
+            public readonly string projectPath;
+
+            public FilePath(string repositoryPath, string projectPath)
+            {
+                this.repositoryPath = repositoryPath;
+                this.projectPath = projectPath;
+            }
+        }
+
         protected internal abstract Status GetStatus();
         protected internal abstract string GetRepositoryRoot();
-        protected internal abstract string[] GetAllUnmergedPaths();
+        protected internal abstract FilePath[] GetAllUnmergedPaths();
         protected internal abstract void CheckoutOurs(string path);
         protected internal abstract void CheckoutTheirs(string path);
         protected internal abstract void MarkAsMerged(string path);
 
         protected string RunCommand(string command, params string[] parameters)
+        {
+            return RunCommand(command, true, parameters);
+        }
+
+        protected string RunCommandInAnyWorkingDirectory(string command, params string[] parameters)
+        {
+            return RunCommand(command, false, parameters);
+        }
+
+        private string RunCommand(string command, bool inRepositoryRoot, params string[] parameters)
         {
             var process = new Process();
             var startInfo = new ProcessStartInfo();
@@ -29,7 +50,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
             startInfo.Arguments = string.Join(' ', parameters);
             startInfo.UseShellExecute = false;
             startInfo.RedirectStandardOutput = true;
-            startInfo.WorkingDirectory = GetWorkingDirectory();
+            if (inRepositoryRoot)
+            {
+                startInfo.WorkingDirectory = GetRepositoryRoot();
+            }
             process.StartInfo = startInfo;
 
             try
@@ -60,15 +84,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
         protected static string InQuotes(string s)
         {
             return $"\"{s}\"";
-        }
-
-        /// <summary>
-        /// Returns <see cref="Application.dataPath"/> sans the <c>Assets</c> folder.
-        /// </summary>
-        private static string GetWorkingDirectory()
-        {
-            var dataPath = Application.dataPath;
-            return dataPath.Substring(0, dataPath.LastIndexOf('/'));
         }
     }
 }

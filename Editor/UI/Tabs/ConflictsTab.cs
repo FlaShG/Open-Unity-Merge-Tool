@@ -28,7 +28,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var firstResult = true;
             foreach (var path in unmergedPaths)
             {
-                if (!FileUtility.IsSupportedByMergeTool(path))
+                if (!FileUtility.IsSupportedByMergeTool(path.projectPath))
                 {
                     continue;
                 }
@@ -49,7 +49,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        private VisualElement CreateLine(string path)
+        private VisualElement CreateLine(VersionControlSystem.FilePath path)
         {
             var line = new HorizontalLayout();
             line.style.backgroundColor = StyleConstants.Colors.BackgroundLine;
@@ -61,12 +61,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.Add(padding);
 
             var icon = new Image();
-            icon.image = AssetDatabase.GetCachedIcon(path);
+            icon.image = AssetDatabase.GetCachedIcon(path.projectPath);
             icon.style.SetSize(18, 18);
             padding.Add(icon);
 
-            var directory = Path.GetDirectoryName(path);
-            var filename = Path.GetFileNameWithoutExtension(path);
+            var directory = Path.GetDirectoryName(path.projectPath);
+            var filename = Path.GetFileNameWithoutExtension(path.projectPath);
             var label = new Label($"{directory}{Path.DirectorySeparatorChar}<b>{filename}</b>");
             label.style.SetPadding(1, 1, 4, 4);
             padding.Add(label);
@@ -82,13 +82,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             separator.style.SetPadding(9);
             line.Add(separator);
 
-            var useOursButton = new Button(() => MergeTool.UseOurs(path));
+            var useOursButton = new Button(() => MergeTool.UseOurs(path.repositoryPath));
             useOursButton.text = "Use\nOurs";
             useOursButton.style.fontSize = 11;
             useOursButton.style.width = 45;
             line.Add(useOursButton);
 
-            var useTheirsButton = new Button(() => MergeTool.UseTheirs(path));
+            var useTheirsButton = new Button(() => MergeTool.UseTheirs(path.repositoryPath));
             useTheirsButton.text = "Use\nTheirs";
             useTheirsButton.style.fontSize = 11;
             useTheirsButton.style.width = 45;

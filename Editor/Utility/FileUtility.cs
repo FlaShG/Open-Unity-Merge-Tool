@@ -51,7 +51,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static string AttachSuffix(string path, string suffix)
         {
-            return Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + suffix + Path.GetExtension(path);
+            return Path.GetDirectoryName(path).Replace('\\', '/') + "/" + Path.GetFileNameWithoutExtension(path) + suffix + Path.GetExtension(path);
         }
 
         /// <summary>
@@ -59,9 +59,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
         /// </summary>
         /// <param name="path">The path relative to the repository.</param>
         /// <returns>The same <paramref name="path"/>, but relative to the Unity project.</returns>
-        public static string GetProjectLocal(string path)
+        public static string GetProjectLocal(string path, string repositoryRootPath)
         {
-            var delta = UnityEngine.Application.dataPath.Length - MergeTool.Vcs.GetRepositoryRoot().Length;
+            var delta = UnityEngine.Application.dataPath.Length - repositoryRootPath.Length;
 
             return "Assets/" + path.Replace('\\', '/').Substring(delta);
         }

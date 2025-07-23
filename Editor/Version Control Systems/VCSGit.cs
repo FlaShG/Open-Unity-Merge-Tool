@@ -24,14 +24,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         protected internal override string GetRepositoryRoot()
         {
-            return RunCommand(command, "rev-parse --show-toplevel");
+            return RunCommandInAnyWorkingDirectory(command, "rev-parse --show-toplevel").Trim();
         }
 
-        protected internal override string[] GetAllUnmergedPaths()
+        protected internal override FilePath[] GetAllUnmergedPaths()
         {
-            var result = RunCommand(command, "diff --name-only --diff-filter=U");
+            var repositoryPaths = RunCommand(command, "diff --name-only --diff-filter=U").Split('\n', System.StringSplitOptions.RemoveEmptyEntries);
+            var repositoryRootPath = GetRepositoryRoot();
 
-            return result.Split('\n');
+            var result = new FilePath[repositoryPaths.Length];
+            for (var i = 0; i < result.Length; i++)
+            {
+                result[i] = new FilePath(repositoryPaths[i], FileUtility.GetProjectLocal(repositoryPaths[i], repositoryRootPath));
+            }
+
+            return result;
         }
 
         protected internal override void CheckoutOurs(string path)
