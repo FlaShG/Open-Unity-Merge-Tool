@@ -117,6 +117,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var id = ObjectId.GetFor(ourComponent);
                 if (theirComponents.TryGetValue(id, out var theirComponent))
                 {
+                    // Component exists in both versions.
                     FindPropertyDifferences(ourComponent, theirComponent);
                     theirComponents.Remove(id);
                 }
