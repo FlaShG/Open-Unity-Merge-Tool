@@ -12,6 +12,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
     /// </summary>
     internal class MergeActionPropertyValues : MergeAction
     {
+        /// <summary>
+        /// Represents a SerializedProperty for which the two versions of an object have different values.
+        /// </summary>
         public class Property : IMergeable
         {
             public GUIContent Title => new(SerializedProperty.displayName);
@@ -84,6 +87,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        /// <summary>
+        /// Represents a difference in the enabled/active state between the two versions of the object.
+        /// </summary>
         public class EnabledDifference : IMergeable
         {
             public GUIContent Title { get; }
