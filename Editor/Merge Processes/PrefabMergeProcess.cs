@@ -25,9 +25,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             DisplayProgressBar(0);
             MergeTool.Vcs.CheckoutTheirs(path);
-            var theirPrefabPath = FileUtility.CopyFile(path, theirsSuffix);
-            var projectLocalTheirPrefabPath = FileUtility.GetProjectLocal(theirPrefabPath);
-            AssetDatabase.ImportAsset(projectLocalTheirPrefabPath);
+            var theirPrefabPath = FileUtility.CopyFile(projectLocalPath, theirsSuffix);
+            AssetDatabase.ImportAsset(theirPrefabPath);
 
             DisplayProgressBar(1);
             MergeTool.Vcs.CheckoutOurs(path);
@@ -44,7 +43,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectDictionary.AddOurObjects(ourInstantiatedObjects, ourObjects);
 
             DisplayProgressBar(3);
-            var theirPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(projectLocalTheirPrefabPath);
+            var theirPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(theirPrefabPath);
             theirPrefab.name = theirPrefab.name[..^theirsSuffix.Length];
 
             DisplayProgressBar(3.5f);

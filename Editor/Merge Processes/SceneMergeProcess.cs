@@ -25,8 +25,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
             EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             Lightmapping.Cancel();
             MergeTool.Vcs.CheckoutTheirs(path);
-            var theirScenePath = FileUtility.CopyFile(path, theirsSuffix);
-            AssetDatabase.ImportAsset(FileUtility.GetProjectLocal(theirScenePath));
+            var theirScenePath = FileUtility.CopyFile(projectLocalPath, theirsSuffix);
+            AssetDatabase.ImportAsset(theirScenePath);
 
             DisplayProgressBar(1);
             MergeTool.Vcs.CheckoutOurs(path);
