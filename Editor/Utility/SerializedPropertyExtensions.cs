@@ -1,7 +1,6 @@
 namespace ThirteenPixels.OpenUnityMergeTool
 {
     using UnityEditor;
-    using UnityObject = UnityEngine.Object;
 
     internal static class SerializedPropertyExtensions
     {
@@ -81,15 +80,36 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (ourProperty.propertyType == SerializedPropertyType.ObjectReference)
             {
-                var our = ourProperty.GetValue();
-                var their = theirProperty.GetValue();
+                var our = ourProperty.objectReferenceValue;
+                var their = theirProperty.objectReferenceValue;
 
                 if (our != null && their != null)
                 {
-                    our = ObjectId.GetFor(our as UnityObject);
-                    their = ObjectId.GetFor(their as UnityObject);
+                    return Equals(ObjectId.GetFor(our), ObjectId.GetFor(their));
                 }
-                return Equals(our, their);
+                return our == null && their == null;
+            }
+
+            if (ourProperty.propertyType == SerializedPropertyType.Generic)
+            {
+                using var ourProp = ourProperty.Copy();
+                using var theirProp = theirProperty.Copy();
+                if (ourProp.hasChildren)
+                {
+                    var returnDepth = ourProperty.depth;
+                    ourProp.Next(true);
+                    theirProp.Next(true);
+                    do
+                    {
+                        if (!HasSameValueAs(ourProp, theirProp))
+                        {
+                            return false;
+                        }
+                    }
+                    while (ourProp.Next(false) && theirProp.Next(false) && ourProp.depth > returnDepth);
+                }
+
+                return true;
             }
 
             return SerializedProperty.DataEquals(ourProperty, theirProperty);
