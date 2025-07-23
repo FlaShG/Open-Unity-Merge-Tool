@@ -124,8 +124,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var oursIsEnabled = target.GetEnabled();
 
                 Title = new GUIContent(target is GameObject ? "Active" : "Enabled");
-                ApplyOursButtonLabel = oursIsEnabled ? "Yes" : "No";
-                ApplyTheirsButtonLabel = oursIsEnabled ? "No" : "Yes";
+                ApplyOursButtonLabel = oursIsEnabled ? "On" : "Off";
+                ApplyTheirsButtonLabel = oursIsEnabled ? "Off" : "On";
 
                 ourValue = oursIsEnabled ? true : false;
                 theirValue = oursIsEnabled ? false : true;
