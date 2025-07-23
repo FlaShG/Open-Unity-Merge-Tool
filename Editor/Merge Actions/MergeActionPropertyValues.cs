@@ -84,6 +84,65 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        public class EnabledDifference : IMergeable
+        {
+            public GUIContent Title { get; }
+
+            public string ApplyOursButtonLabel { get; }
+
+            public string ApplyTheirsButtonLabel { get; }
+
+            public DecisionState DecisionState { get; private set; } = DecisionState.Incomplete;
+
+            public SerializedProperty SerializedProperty => null;
+
+            public object OurValue => ourValue;
+
+            public object TheirValue => theirValue;
+
+            public bool IsUsingOurs => target.GetEnabled() == ourValue;
+
+            public bool IsUsingTheirs => target.GetEnabled() == theirValue;
+
+            // TODO Prefab defaults should be supported here as well
+            public bool OurValueIsPrefabDefault => false;
+            public bool TheirValueIsPrefabDefault => false;
+
+            private readonly UnityObject target;
+            private readonly bool ourValue;
+            private readonly bool theirValue;
+
+            public EnabledDifference(UnityObject target)
+            {
+                this.target = target;
+                var oursIsEnabled = target.GetEnabled();
+
+                Title = new GUIContent(target is GameObject ? "Active" : "Enabled");
+                ApplyOursButtonLabel = oursIsEnabled ? "Yes" : "No";
+                ApplyTheirsButtonLabel = oursIsEnabled ? "No" : "Yes";
+
+                ourValue = oursIsEnabled ? true : false;
+                theirValue = oursIsEnabled ? false : true;
+            }
+
+            public void AcceptNewValue()
+            {
+                DecisionState = DecisionState.Complete;
+            }
+
+            public void UseOurs()
+            {
+                target.SetEnabled(ourValue);
+                DecisionState = DecisionState.Complete;
+            }
+
+            public void UseTheirs()
+            {
+                target.SetEnabled(theirValue);
+                DecisionState = DecisionState.Complete;
+            }
+        }
+
         public override GUIContent Title => new($"<b>{target.GetType().Name}</b>", AssetPreview.GetMiniTypeThumbnail(target.GetType()));
         public override string ApplyOursButtonLabel => "Apply all ours";
         public override string ApplyTheirsButtonLabel => "Apply all theirs";
@@ -125,6 +184,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             properties.Add(new Property(ourProperty, theirProperty));
             theirProperty.Dispose();
+        }
+
+        public void SetEnabledDifference()
+        {
+            properties.Insert(0, new EnabledDifference(target));
         }
 
         public void SortPropertiesAlphabetically()

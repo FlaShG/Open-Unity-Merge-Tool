@@ -117,7 +117,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 var id = ObjectId.GetFor(ourComponent);
                 if (theirComponents.TryGetValue(id, out var theirComponent))
                 {
-                    // Component exists in both versions.
                     FindPropertyDifferences(ourComponent, theirComponent);
                     theirComponents.Remove(id);
                 }
@@ -143,6 +142,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             MergeActionPropertyValues mergeAction = null;
+
+            if (ours.GetEnabled() != theirs.GetEnabled())
+            {
+                mergeAction = new MergeActionPropertyValues(ours);
+                mergeAction.SetEnabledDifference();
+            }
 
             var ourSerializedObject = new SerializedObject(ours);
             var theirSerializedObject = new SerializedObject(theirs);
