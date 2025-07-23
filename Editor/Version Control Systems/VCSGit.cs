@@ -22,23 +22,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
-        protected internal override string GetRepositoryRoot()
-        {
-            return RunCommandInAnyWorkingDirectory(command, "rev-parse --show-toplevel").Trim();
-        }
-
-        protected internal override FilePath[] GetAllUnmergedPaths()
+        protected internal override string[] GetAllUnmergedPaths()
         {
             var repositoryPaths = RunCommand(command, "diff --name-only --diff-filter=U").Split('\n', System.StringSplitOptions.RemoveEmptyEntries);
-            var repositoryRootPath = GetRepositoryRoot();
+            var repositoryRootPath = RunCommand(command, "rev-parse --show-toplevel").Trim();
 
-            var result = new FilePath[repositoryPaths.Length];
-            for (var i = 0; i < result.Length; i++)
+            for (var i = 0; i < repositoryPaths.Length; i++)
             {
-                result[i] = new FilePath(repositoryPaths[i], FileUtility.GetProjectLocal(repositoryPaths[i], repositoryRootPath));
+                repositoryPaths[i] = FileUtility.GetProjectLocal(repositoryPaths[i], repositoryRootPath);
             }
 
-            return result;
+            return repositoryPaths;
         }
 
         protected internal override void CheckoutOurs(string path)

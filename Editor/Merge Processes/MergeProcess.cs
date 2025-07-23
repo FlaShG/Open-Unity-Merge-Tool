@@ -11,14 +11,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         protected readonly DualSourceGameObjectDictionary gameObjectDictionary = new();
         /// <summary>
-        /// The path of the file this process is merging.
+        /// The path of the file this process is merging, relative to the project.
         /// </summary>
-        protected readonly VersionControlSystem.FilePath path;
+        protected readonly string path;
 
         public List<GameObjectMergeActionContainer> MergeActionContainers { get; private set; }
         public int CompletedMergeActionContainerCount => MergeActionContainers.Where(container => container.IsCompleted).Count();
 
-        protected MergeProcess(VersionControlSystem.FilePath path)
+        protected MergeProcess(string path)
         {
             this.path = path;
         }

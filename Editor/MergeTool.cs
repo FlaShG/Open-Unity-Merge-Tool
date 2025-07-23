@@ -38,15 +38,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
             LoadVCSFromPrefs();
         }
 
-        public static void StartMergeProcess(VersionControlSystem.FilePath path)
+        public static void StartMergeProcess(string path)
         {
             CancelCurrentMergeProgress();
 
-            if (FileUtility.IsScene(path.projectPath))
+            if (FileUtility.IsScene(path))
             {
                 CurrentMergeProcess = new SceneMergeProcess(path);
             }
-            else if (FileUtility.IsPrefab(path.projectPath))
+            else if (FileUtility.IsPrefab(path))
             {
                 CurrentMergeProcess = new PrefabMergeProcess(path);
             }

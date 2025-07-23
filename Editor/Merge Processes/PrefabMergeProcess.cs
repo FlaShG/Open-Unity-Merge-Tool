@@ -11,7 +11,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     {
         private PrefabStage prefabStage;
 
-        public PrefabMergeProcess(VersionControlSystem.FilePath path) : base(path)
+        public PrefabMergeProcess(string path) : base(path)
         {
             
         }
@@ -24,17 +24,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             DisplayProgressBar(0);
-            MergeTool.Vcs.CheckoutTheirs(path.repositoryPath);
-            var theirPrefabPath = FileUtility.CopyFile(path.projectPath, theirsSuffix);
+            MergeTool.Vcs.CheckoutTheirs(path);
+            var theirPrefabPath = FileUtility.CopyFile(path, theirsSuffix);
             AssetDatabase.ImportAsset(theirPrefabPath);
 
             DisplayProgressBar(1);
-            MergeTool.Vcs.CheckoutOurs(path.repositoryPath);
-            AssetDatabase.ImportAsset(path.projectPath);
+            MergeTool.Vcs.CheckoutOurs(path);
+            AssetDatabase.ImportAsset(path);
 
             DisplayProgressBar(2);
-            var ourPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path.projectPath);
-            prefabStage = PrefabStageUtility.OpenPrefab(path.projectPath);
+            var ourPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+            prefabStage = PrefabStageUtility.OpenPrefab(path);
             EditorApplication.update += Update;
 
             DisplayProgressBar(2.5f);
@@ -68,15 +68,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         protected override void FinishProcess()
         {
-            PrefabUtility.SaveAsPrefabAsset(prefabStage.prefabContentsRoot, path.projectPath);
+            PrefabUtility.SaveAsPrefabAsset(prefabStage.prefabContentsRoot, path);
             ReturnFromStage();
             Cleanup();
-            MergeTool.Vcs.MarkAsMerged(path.repositoryPath);
+            MergeTool.Vcs.MarkAsMerged(path);
         }
 
         private void Cleanup()
         {
-            AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(path.projectPath, theirsSuffix));
+            AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(path, theirsSuffix));
             EditorUtility.ClearProgressBar();
         }
 
