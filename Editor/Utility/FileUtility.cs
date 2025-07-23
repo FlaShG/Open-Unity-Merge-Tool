@@ -53,5 +53,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             return Path.GetDirectoryName(path) + "/" + Path.GetFileNameWithoutExtension(path) + suffix + Path.GetExtension(path);
         }
+
+        /// <summary>
+        /// In cases in which the Unity project is not in the repository's root, 
+        /// </summary>
+        /// <param name="path">The path relative to the repository.</param>
+        /// <returns>The same <paramref name="path"/>, but relative to the Unity project.</returns>
+        public static string GetProjectLocal(string path)
+        {
+            var delta = UnityEngine.Application.dataPath.Length - MergeTool.Vcs.GetRepositoryRoot().Length;
+
+            return "Assets/" + path.Replace('\\', '/').Substring(delta);
+        }
     }
 }

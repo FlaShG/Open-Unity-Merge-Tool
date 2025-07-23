@@ -11,7 +11,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     {
         public SceneMergeProcess(string path) : base(path)
         {
-            
+
         }
 
         protected override List<GameObjectMergeActionContainer> StartProcess()
@@ -26,13 +26,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             Lightmapping.Cancel();
             MergeTool.Vcs.CheckoutTheirs(path);
             var theirScenePath = FileUtility.CopyFile(path, theirsSuffix);
-            AssetDatabase.ImportAsset(theirScenePath);
+            AssetDatabase.ImportAsset(FileUtility.GetProjectLocal(theirScenePath));
 
             DisplayProgressBar(1);
             MergeTool.Vcs.CheckoutOurs(path);
 
             DisplayProgressBar(2);
-            var ourScene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            var ourScene = EditorSceneManager.OpenScene(projectLocalPath, OpenSceneMode.Single);
             Lightmapping.Cancel();
 
             DisplayProgressBar(2.5f);
@@ -40,7 +40,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectDictionary.AddOurObjects(ourObjects);
 
             DisplayProgressBar(3);
-            var theirScene = EditorSceneManager.OpenScene(FileUtility.AttachSuffix(path, theirsSuffix), OpenSceneMode.Additive);
+            var theirScene = EditorSceneManager.OpenScene(FileUtility.AttachSuffix(projectLocalPath, theirsSuffix), OpenSceneMode.Additive);
             var theirObjects = GetAllSceneObjects(theirScene);
             gameObjectDictionary.AddTheirObjects(theirObjects);
 
@@ -57,7 +57,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         protected override void CancelProcess()
         {
             Cleanup();
-            EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            EditorSceneManager.OpenScene(projectLocalPath, OpenSceneMode.Single);
         }
 
         protected override void FinishProcess()
@@ -65,12 +65,12 @@ namespace ThirteenPixels.OpenUnityMergeTool
             Cleanup();
             EditorSceneManager.SaveScene(EditorSceneManager.GetActiveScene());
             MergeTool.Vcs.MarkAsMerged(path);
-            EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            EditorSceneManager.OpenScene(projectLocalPath, OpenSceneMode.Single);
         }
 
         private void Cleanup()
         {
-            AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(path, theirsSuffix));
+            AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(projectLocalPath, theirsSuffix));
             EditorUtility.ClearProgressBar();
         }
 

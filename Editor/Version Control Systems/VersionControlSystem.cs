@@ -14,6 +14,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         }
 
         protected internal abstract Status GetStatus();
+        protected internal abstract string GetRepositoryRoot();
         protected internal abstract string[] GetAllUnmergedPaths();
         protected internal abstract void CheckoutOurs(string path);
         protected internal abstract void CheckoutTheirs(string path);
@@ -46,20 +47,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             return output;
         }
 
-        /// <summary>
-        /// Returns <see cref="Application.dataPath"/> sans the <c>Assets</c> folder.
-        /// </summary>
-        private static string GetWorkingDirectory()
-        {
-            var dataPath = Application.dataPath;
-            return dataPath.Substring(0, dataPath.LastIndexOf('/'));
-        }
-
-        protected static string InQuotes(string s)
-        {
-            return $"\"{s}\"";
-        }
-
         internal static string GetTitle(VersionControlSystem vcs)
         {
             return vcs == null ? "None" : GetTitle(vcs.GetType());
@@ -68,6 +55,20 @@ namespace ThirteenPixels.OpenUnityMergeTool
         internal static string GetTitle(Type type)
         {
             return type.GetCustomAttribute<VCSInfoAttribute>()?.title ?? type.Name;
+        }
+
+        protected static string InQuotes(string s)
+        {
+            return $"\"{s}\"";
+        }
+
+        /// <summary>
+        /// Returns <see cref="Application.dataPath"/> sans the <c>Assets</c> folder.
+        /// </summary>
+        private static string GetWorkingDirectory()
+        {
+            var dataPath = Application.dataPath;
+            return dataPath.Substring(0, dataPath.LastIndexOf('/'));
         }
     }
 }

@@ -22,6 +22,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
         }
 
+        protected internal override string GetRepositoryRoot()
+        {
+            return RunCommand(command, "rev-parse --show-toplevel");
+        }
+
         protected internal override string[] GetAllUnmergedPaths()
         {
             var result = RunCommand(command, "diff --name-only --diff-filter=U");
