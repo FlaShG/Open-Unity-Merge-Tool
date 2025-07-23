@@ -17,7 +17,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public bool HasActions => mergeActions.Count > 0;
         public bool IsCompleted => mergeActions.All(action => action.DecisionState == DecisionState.Complete);
         public bool HasIncompleteActions => mergeActions.Any(action => action.DecisionState == DecisionState.Incomplete);
-        public GameObject TargetGameObject => ourGameObject;
+        public GameObject TargetGameObject => ourGameObject ? ourGameObject : theirGameObject;
         public bool IsRelatedToGameObjectExistence { get; private set; }
 
         private readonly GameObject ourGameObject;
