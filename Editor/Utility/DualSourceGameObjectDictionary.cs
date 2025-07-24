@@ -3,22 +3,34 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEngine;
     using System;
     using System.Collections.Generic;
+    using UnityObject = UnityEngine.Object;
 
     internal class DualSourceGameObjectDictionary : IDisposable
     {
-        private readonly Dictionary<ObjectId, GameObject> ourObjects = new();
+        private readonly Dictionary<ObjectId, GameObject> ourGameObjects = new();
         /// <summary>
         /// Maps our "real" objects (aka the objects in the prefab)
         /// onto the corresponding object in our prefab stage.
         /// </summary>
-        private readonly Dictionary<GameObject, GameObject> ourRealObjects = new();
-        private readonly Dictionary<ObjectId, GameObject> theirObjects = new();
+        private readonly Dictionary<GameObject, GameObject> ourRealGameObjects = new();
+        /// <summary>
+        /// All UnityEngine.Objects in "our" scene - GameObjects and their components.
+        /// </summary>
+        private readonly Dictionary<ObjectId, UnityObject> allOurObjects = new();
+        private readonly Dictionary<ObjectId, GameObject> theirGameObjects = new();
 
         public void AddOurObjects(IEnumerable<GameObject> gameObjects)
         {
             foreach (var gameObject in gameObjects)
             {
-                ourObjects.Add(ObjectId.GetFor(gameObject), gameObject);
+                var gameObjectId = ObjectId.GetFor(gameObject);
+                ourGameObjects.Add(gameObjectId, gameObject);
+
+                allOurObjects.Add(gameObjectId, gameObject);
+                foreach (var component in gameObject.GetComponents<Component>())
+                {
+                    allOurObjects.Add(ObjectId.GetFor(component), component);
+                }
             }
         }
 
@@ -35,17 +47,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 var realObject = realGameObjectsIterator.Current;
                 var id = ObjectId.GetFor(realObject);
-                ourObjects.Add(id, gameObjectInstance);
-                ourRealObjects.Add(gameObjectInstance, realObject);
+                ourGameObjects.Add(id, gameObjectInstance);
+                ourRealGameObjects.Add(gameObjectInstance, realObject);
             }
-            ObjectId.backupMapping = ourRealObjects.GetOptional;
+            ObjectId.backupMapping = ourRealGameObjects.GetValueOrDefault;
         }
 
         public void AddTheirObjects(IEnumerable<GameObject> gameObjects)
         {
             foreach (var gameObject in gameObjects)
             {
-                theirObjects.Add(ObjectId.GetFor(gameObject), gameObject);
+                theirGameObjects.Add(ObjectId.GetFor(gameObject), gameObject);
             }
         }
 
@@ -54,7 +66,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
             if (gameObject == null) return null;
 
             var id = ObjectId.GetFor(gameObject);
-            return ourObjects.GetOptional(id);
+            return ourGameObjects.GetValueOrDefault(id, gameObject);
+        }
+
+        public UnityObject GetOurEquivalentToTheir(UnityObject obj)
+        {
+            if (obj == null) return null;
+
+            var id = ObjectId.GetFor(obj);
+            return allOurObjects.GetValueOrDefault(id, obj);
         }
 
         public List<GameObjectMergeActionContainer> GenerateMergeActions()
@@ -63,7 +83,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             GameObject deletedPotentialParent = null;
 
-            foreach (var ourObject in ourObjects)
+            foreach (var ourObject in ourGameObjects)
             {
                 if (deletedPotentialParent && ourObject.Value.HasParent(deletedPotentialParent))
                 {
@@ -72,7 +92,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 deletedPotentialParent = null;
 
-                var container = new GameObjectMergeActionContainer(this, ourObject.Value, theirObjects.GetOptional(ourObject.Key));
+                var container = new GameObjectMergeActionContainer(this, ourObject.Value, theirGameObjects.GetValueOrDefault(ourObject.Key));
                 if (container.HasActions)
                 {
                     result.Add(container);
@@ -85,7 +105,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             deletedPotentialParent = null;
 
-            foreach (var theirObject in theirObjects)
+            foreach (var theirObject in theirGameObjects)
             {
                 if (deletedPotentialParent && theirObject.Value.HasParent(deletedPotentialParent))
                 {
@@ -94,7 +114,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 deletedPotentialParent = null;
 
-                if (!ourObjects.ContainsKey(theirObject.Key))
+                if (!ourGameObjects.ContainsKey(theirObject.Key))
                 {
                     var container = new GameObjectMergeActionContainer(this, null, theirObject.Value);
                     if (container.HasActions)

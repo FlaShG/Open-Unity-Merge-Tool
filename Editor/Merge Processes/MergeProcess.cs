@@ -3,6 +3,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using UnityEditor.SceneManagement;
     using System.Collections.Generic;
     using System.Linq;
+    using UnityObject = UnityEngine.Object;
 
     internal abstract class MergeProcess
     {
@@ -51,6 +52,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             CancelProcess();
             gameObjectDictionary.Dispose();
+        }
+
+        public UnityObject GetOurEquivalentToTheir(UnityObject obj)
+        {
+            return gameObjectDictionary.GetOurEquivalentToTheir(obj);
         }
 
         public override string ToString()

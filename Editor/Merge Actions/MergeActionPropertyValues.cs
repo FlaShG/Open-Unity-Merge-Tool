@@ -38,12 +38,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 SerializedProperty = ourProperty;
 
                 OurValue = ourProperty.GetValue();
-                TheirValue = theirProperty.GetValue();
+                var theirValue = theirProperty.GetValue();
+                if (theirValue is UnityObject unityObject)
+                {
+                    theirValue = MergeTool.CurrentMergeProcess.GetOurEquivalentToTheir(unityObject);
+                }
+                TheirValue = theirValue;
 
                 OurValueIsPrefabDefault = ourProperty.IsPrefabDefault();
                 TheirValueIsPrefabDefault = theirProperty.IsPrefabDefault();
                 ourValueIsPrefabOverride = ourProperty.IsPrefabOverride();
                 theirValueIsPrefabOverride = theirProperty.IsPrefabOverride();
+
+                theirProperty.Dispose();
             }
 
             public void UseOurs()
@@ -191,7 +198,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
         public void AddProperty(SerializedProperty ourProperty, SerializedProperty theirProperty)
         {
             properties.Add(new Property(ourProperty, theirProperty));
-            theirProperty.Dispose();
         }
 
         public void SetEnabledDifference()
