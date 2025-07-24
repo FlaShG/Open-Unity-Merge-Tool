@@ -92,23 +92,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             if (ourProperty.propertyType == SerializedPropertyType.Generic)
             {
-                using var ourProp = ourProperty.Copy();
-                using var theirProp = theirProperty.Copy();
-                if (ourProp.hasChildren)
-                {
-                    var returnDepth = ourProperty.depth;
-                    ourProp.Next(true);
-                    theirProp.Next(true);
-                    do
-                    {
-                        if (!HasSameValueAs(ourProp, theirProp))
-                        {
-                            return false;
-                        }
-                    }
-                    while (ourProp.Next(false) && theirProp.Next(false) && ourProp.depth > returnDepth);
-                }
-
                 return true;
             }
 

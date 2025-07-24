@@ -27,8 +27,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
             this.mergeable = mergeable;
             this.type = type;
 
-            style.height = 26;
-
             line = new HorizontalLayout();
             if (type == Type.Header)
             {

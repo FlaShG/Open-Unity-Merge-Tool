@@ -40,14 +40,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             gameObjectDictionary.AddOurObjects(ourObjects);
             // Deactivate all objects to prevent problems while loading the other versions in the next step.
             // For example, NavMeshSurfaces are complaining if two of them reference the same NavMeshData.
-            var deactivatedObjects = Deactivate(ourObjects);
+            var actuallyDeactivatedObjects = Deactivate(ourObjects);
 
             DisplayProgressBar(3);
             var theirScene = EditorSceneManager.OpenScene(FileUtility.AttachSuffix(path, theirsSuffix), OpenSceneMode.Additive);
             var theirObjects = GetAllSceneObjects(theirScene);
             gameObjectDictionary.AddTheirObjects(theirObjects);
 
-            Activate(ourObjects, deactivatedObjects);
+            Activate(ourObjects, actuallyDeactivatedObjects);
 
             DisplayProgressBar(4);
             var mergeActions = gameObjectDictionary.GenerateMergeActions();

@@ -27,6 +27,17 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             var property = mergeable.SerializedProperty;
 
+            var path = property.propertyPath;
+            var lastSlashIndexInPath = path.LastIndexOf('.');
+            if (lastSlashIndexInPath >= 0)
+            {
+                var pathLabel = new Label(path.Substring(0, lastSlashIndexInPath));
+                pathLabel.style.SetColorAlpha(0.5f);
+                pathLabel.style.marginTop = 3;
+                pathLabel.style.marginBottom = -4;
+                Add(pathLabel);
+            }
+
             var propertyField = new UnityPropertyField(property);
             propertyField.Bind(property.serializedObject);
             propertyField.TrackPropertyValue(property, _ =>

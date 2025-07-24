@@ -27,6 +27,13 @@ namespace ThirteenPixels.OpenUnityMergeTool
             style.height = height;
         }
 
+        public static void SetColorAlpha(this IStyle style, float alpha)
+        {
+            var color = style.color.value;
+            color.a = alpha;
+            style.color = color;
+        }
+
         public static void SetPadding(this IStyle style, float padding)
         {
             style.SetPadding(padding, padding, padding, padding);

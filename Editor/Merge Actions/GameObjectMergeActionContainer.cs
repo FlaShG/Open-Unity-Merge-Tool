@@ -160,6 +160,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 theirProperty.Next(true);
 
                 var shouldEnterChildren = ourProperty.hasVisibleChildren;
+                var ourPropertyIsValid = true;
+                var theirPropertyIsValid = true;
 
                 do
                 {
@@ -171,9 +173,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     }
 
                     shouldEnterChildren = ShouldEnterChildren(ourProperty);
-                    theirProperty.NextVisible(shouldEnterChildren);
+
+                    ourPropertyIsValid = ourProperty.NextVisible(shouldEnterChildren);
+                    theirPropertyIsValid = theirProperty.NextVisible(shouldEnterChildren);
                 }
-                while (ourProperty.NextVisible(shouldEnterChildren));
+                while (ourPropertyIsValid && theirPropertyIsValid);
             }
             
             if (mergeAction != null)
