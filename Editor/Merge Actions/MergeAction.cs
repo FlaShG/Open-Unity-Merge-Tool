@@ -53,6 +53,14 @@ namespace ThirteenPixels.OpenUnityMergeTool
             EditorRepainter.RepaintInspector();
         }
 
+        public void AcceptAutomaticChoice()
+        {
+            if (DecisionState == DecisionState.AutoCompleted)
+            {
+                DecisionState = DecisionState.Complete;
+            }
+        }
+
         protected abstract void ApplyOurs();
 
         protected abstract void ApplyTheirs();

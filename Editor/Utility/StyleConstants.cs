@@ -12,6 +12,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             public static Texture Prefab => GetEditorIcon("d_Prefab Icon", "Prefab Icon");
             public static Texture Hierarchy => GetEditorIcon("d_UnityEditor.SceneHierarchyWindow", "UnityEditor.SceneHierarchyWindow");
             public static Texture Warning => GetEditorIcon("d_console.warnicon", "console.warnicon");
+            public static Texture Actions => GetEditorIcon("d_Favorite", "Favorite");
 
             private static Texture GetEditorIcon(string id)
             {

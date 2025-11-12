@@ -16,7 +16,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         private ScrollView scrollView;
         private ProgressBar progressBar;
         private Button nextButton;
-        private GenericDropdownMenu pickGameObjectDropdown;
+        private GenericDropdownMenu pickButtonDropdown;
+        private GenericDropdownMenu actionsButtonDropdown;
         private Button finishButton;
         private VisualElement noMergeProgressInfo;
 
@@ -32,6 +33,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             AddTopLine();
             AddScrollView();
             AddBottomLine();
+            BuildActionsButtonDropdown();
         }
 
         public override void UpdateContent()
@@ -72,7 +74,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     ShowCurrentContainer();
                 }
 
-                BuildPickObjectDropdown();
+                BuildPickButtonDropdown();
             }
         }
 
@@ -149,8 +151,11 @@ namespace ThirteenPixels.OpenUnityMergeTool
             multipleObjectsUI = new HorizontalLayout();
             line.Add(multipleObjectsUI);
 
-            var pickGameObjectButton = CreatePickGameObjectButton();
-            multipleObjectsUI.Add(pickGameObjectButton);
+            var actionsButton = CreateActionsButton();
+            multipleObjectsUI.Add(actionsButton);
+
+            var pickButton = CreatePickButton();
+            multipleObjectsUI.Add(pickButton);
 
             nextButton = new Button(ShowNextIncompleteContainer);
             nextButton.text = "Next →";
@@ -173,13 +178,29 @@ namespace ThirteenPixels.OpenUnityMergeTool
             line.Add(finishButton);
         }
 
-        private Button CreatePickGameObjectButton()
+        private Button CreateActionsButton()
+        {
+            var actionsButton = new Button();
+
+            var icon = new Image();
+            icon.image = StyleConstants.Icons.Actions;
+            icon.style.marginTop = 4;
+            actionsButton.Add(icon);
+
+            actionsButton.clicked += () =>
+            {
+                actionsButtonDropdown.DropDown(actionsButton.worldBound, actionsButton, false);
+            };
+            return actionsButton;
+        }
+
+        private Button CreatePickButton()
         {
             var pickButton = new Button();
-            pickButton.text = "Pick GameObject";
+            pickButton.text = "Pick";
             pickButton.clicked += () =>
             {
-                pickGameObjectDropdown.DropDown(pickButton.worldBound, pickButton, false);
+                pickButtonDropdown.DropDown(pickButton.worldBound, pickButton, false);
             };
             return pickButton;
         }
@@ -239,17 +260,22 @@ namespace ThirteenPixels.OpenUnityMergeTool
             scrollView.Query<MergeActionCard>().ForEach(card => card.UpdateContent());
         }
 
-        private void BuildPickObjectDropdown()
+        private void BuildActionsButtonDropdown()
         {
-            pickGameObjectDropdown = new GenericDropdownMenu();
+            actionsButtonDropdown = new GenericDropdownMenu();
+            actionsButtonDropdown.AddItem("Confirm all automatic choices",
+                false,
+                ConfirmAllAutomaticChoices);
+        }
+
+        private void BuildPickButtonDropdown()
+        {
+            pickButtonDropdown = new GenericDropdownMenu();
             foreach (var container in MergeTool.CurrentMergeProcess.MergeActionContainers)
             {
-                pickGameObjectDropdown.AddItem(container.Name,
+                pickButtonDropdown.AddItem(container.Name,
                     container.IsCompleted,
-                    () =>
-                    {
-                        ShowContainer(container);
-                    });
+                    () => ShowContainer(container));
             }
         }
 
@@ -266,6 +292,18 @@ namespace ThirteenPixels.OpenUnityMergeTool
             }
 
             MergeTool.CancelCurrentMergeProgress();
+        }
+
+        private void ConfirmAllAutomaticChoices()
+        {
+            foreach (var container in MergeTool.CurrentMergeProcess.MergeActionContainers)
+            {
+                foreach (var action in container.MergeActions)
+                {
+                    action.AcceptAutomaticChoice();
+                }
+            }
+            UpdateContent();
         }
 
         private void UseOurs()
