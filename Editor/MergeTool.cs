@@ -88,24 +88,28 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public static void UseOurs(string path)
         {
-            var message = $"Using our version of\n{path}...";
-            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0f);
-            vcs.CheckoutOurs(path);
-            EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
-            vcs.MarkAsMerged(path);
-            StateChanged?.Invoke();
-            EditorUtility.ClearProgressBar();
+            UseEntireVersion(path,
+                $"Using our version of\n{path}...",
+                vcs.CheckoutOurs);
         }
 
         public static void UseTheirs(string path)
         {
-            var message = $"Using their version of\n{path}...";
+            UseEntireVersion(path,
+                $"Using their version of\n{path}...",
+                vcs.CheckoutTheirs);
+        }
+
+        public static void UseEntireVersion(string path, string message, Action<string> checkoutAction)
+        {
             EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0f);
-            vcs.CheckoutTheirs(path);
+            checkoutAction(path);
             EditorUtility.DisplayProgressBar(DialogConstants.title, message, 0.5f);
             vcs.MarkAsMerged(path);
             StateChanged?.Invoke();
             EditorUtility.ClearProgressBar();
+
+            AssetDatabase.Refresh();
         }
 
         public static void TriggerStateChangeEvent()
