@@ -83,50 +83,50 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             GameObject deletedPotentialParent = null;
 
-            foreach (var ourObject in ourGameObjects)
+            foreach (var (ourObjectId, ourObject) in ourGameObjects)
             {
-                if (deletedPotentialParent && ourObject.Value.HasParent(deletedPotentialParent))
+                if (deletedPotentialParent && ourObject.HasParent(deletedPotentialParent))
                 {
                     continue;
                 }
 
                 deletedPotentialParent = null;
 
-                var container = new GameObjectMergeActionContainer(this, ourObject.Value, theirGameObjects.GetValueOrDefault(ourObject.Key));
+                var container = new GameObjectMergeActionContainer(this, ourObject, theirGameObjects.GetValueOrDefault(ourObjectId));
                 if (container.HasActions)
                 {
                     result.Add(container);
                     if (container.IsRelatedToGameObjectExistence)
                     {
-                        deletedPotentialParent = ourObject.Value;
+                        deletedPotentialParent = ourObject;
                     }
                 }
             }
 
             deletedPotentialParent = null;
 
-            foreach (var theirObject in theirGameObjects)
+            foreach (var (theirObjectId, theirObject) in theirGameObjects)
             {
-                if (deletedPotentialParent && theirObject.Value.HasParent(deletedPotentialParent))
+                if (deletedPotentialParent && theirObject.HasParent(deletedPotentialParent))
                 {
                     continue;
                 }
 
                 deletedPotentialParent = null;
 
-                if (!ourGameObjects.ContainsKey(theirObject.Key))
+                if (!ourGameObjects.ContainsKey(theirObjectId))
                 {
-                    var container = new GameObjectMergeActionContainer(this, null, theirObject.Value);
+                    var container = new GameObjectMergeActionContainer(this, null, theirObject);
                     if (container.HasActions)
                     {
                         result.Add(container);
                         if (container.IsRelatedToGameObjectExistence)
                         {
-                            deletedPotentialParent = theirObject.Value;
+                            deletedPotentialParent = theirObject;
                         }
                     }
                 }
-                theirObject.Value.SetActiveForMerging(false);
+                theirObject.SetActiveForMerging(false);
             }
 
             return result;
