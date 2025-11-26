@@ -19,6 +19,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
         {
             this.gameObject = gameObject;
             gameObjectIsActuallyActiveInScene = gameObject.activeSelf;
+
+            LetGameObjectExist();
             SetAsAutoCompleted();
         }
 

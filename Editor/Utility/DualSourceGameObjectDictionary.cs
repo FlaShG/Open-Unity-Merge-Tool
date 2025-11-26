@@ -131,7 +131,6 @@ namespace ThirteenPixels.OpenUnityMergeTool
                                 deletedPotentialParent = theirObject;
                             }
                         }
-                        theirInstancedObject.SetActiveForMerging(false);
                     }
                 }
                 else
@@ -148,7 +147,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
                             }
                         }
                     }
-                    theirObject.SetActiveForMerging(false);
+                    else
+                    {
+                        theirObject.SetActiveForMerging(false);
+                    }
                 }
             }
 
