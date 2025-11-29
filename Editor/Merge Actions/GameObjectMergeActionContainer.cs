@@ -27,7 +27,8 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         public GameObjectMergeActionContainer(DualSourceGameObjectDictionary dictionary,
             GameObject ourGameObject,
-            GameObject theirGameObject)
+            GameObject theirGameObject,
+            bool ignoreParent = false)
         {
             this.ourGameObject = ourGameObject;
             this.theirGameObject = theirGameObject;
@@ -50,7 +51,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
             else
             {
                 Name = ourGameObject.GetPath();
-                FindParentDifference(dictionary);
+                if (!ignoreParent)
+                {
+                    FindParentDifference(dictionary);
+                }
                 FindGameObjectPropertyDifferences();
                 FindComponentDifferences();
             }

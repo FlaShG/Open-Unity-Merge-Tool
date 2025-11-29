@@ -52,7 +52,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
             DisplayProgressBar(4);
             // TODO The prefabs are merged at this point, which will break sibling indices.
-            var mergeActions = gameObjectDictionary.GenerateMergeActions(theirObjectsAreInPrefab: true);
+            var mergeActions = gameObjectDictionary.GenerateMergeActions(prefabMerge: true);
 
             DisplayProgressBar(5);
             Cleanup();

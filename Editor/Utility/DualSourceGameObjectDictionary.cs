@@ -5,6 +5,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
     using System.Collections.Generic;
     using UnityObject = UnityEngine.Object;
 
+    /// <summary>
+    /// A multi-dictionary that stores multiple versions GameObjects from different sources: The branches that are being merged.
+    /// </summary>
     internal class DualSourceGameObjectDictionary : IDisposable
     {
         private readonly Dictionary<ObjectId, GameObject> ourGameObjects = new();
@@ -77,7 +80,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             return allOurObjects.GetValueOrDefault(id, obj);
         }
 
-        public List<GameObjectMergeActionContainer> GenerateMergeActions(bool theirObjectsAreInPrefab)
+        public List<GameObjectMergeActionContainer> GenerateMergeActions(bool prefabMerge)
         {
             var result = new List<GameObjectMergeActionContainer>();
 
@@ -92,7 +95,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 deletedPotentialParent = null;
 
-                var container = new GameObjectMergeActionContainer(this, ourObject, theirGameObjects.GetValueOrDefault(ourObjectId));
+                var isRootObject = ourRealGameObjects[ourObject].transform.parent == null;
+                var container = new GameObjectMergeActionContainer(this, ourObject, theirGameObjects.GetValueOrDefault(ourObjectId),
+                    ignoreParent: prefabMerge && isRootObject);
                 if (container.HasActions)
                 {
                     result.Add(container);
@@ -114,7 +119,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
                 deletedPotentialParent = null;
 
-                if (theirObjectsAreInPrefab)
+                if (prefabMerge)
                 {
                     if (!ourGameObjects.ContainsKey(theirObjectId))
                     {

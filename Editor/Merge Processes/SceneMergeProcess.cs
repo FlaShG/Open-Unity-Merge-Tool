@@ -50,7 +50,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             Activate(ourObjects, actuallyDeactivatedObjects);
 
             DisplayProgressBar(4);
-            var mergeActions = gameObjectDictionary.GenerateMergeActions(theirObjectsAreInPrefab: false);
+            var mergeActions = gameObjectDictionary.GenerateMergeActions(prefabMerge: false);
 
             DisplayProgressBar(5);
             EditorSceneManager.MergeScenes(theirScene, ourScene);
