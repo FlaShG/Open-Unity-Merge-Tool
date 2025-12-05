@@ -103,16 +103,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         private void FindComponentDifferences()
         {
-            var ourComponents = ourGameObject.GetComponents<Component>();
-
             var theirComponents = new Dictionary<ObjectId, Component>();
             foreach (var component in theirGameObject.GetComponents<Component>())
             {
                 if (component == null) continue;
 
-                var id = ObjectId.GetFor(component);
                 theirComponents.Add(ObjectId.GetFor(component), component);
             }
+
+            var ourComponents = ourGameObject.GetComponents<Component>();
 
             foreach (var ourComponent in ourComponents)
             {
