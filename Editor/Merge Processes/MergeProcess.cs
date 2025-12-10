@@ -35,7 +35,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
                 }
                 catch
                 {
-                    Cleanup();
+                    Cancel();
                     throw;
                 }
             }
