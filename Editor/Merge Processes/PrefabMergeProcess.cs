@@ -74,7 +74,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             MergeTool.Vcs.MarkAsMerged(path);
         }
 
-        private void Cleanup()
+        protected override void Cleanup()
         {
             AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(path, theirsSuffix));
             EditorUtility.ClearProgressBar();

@@ -29,7 +29,15 @@ namespace ThirteenPixels.OpenUnityMergeTool
             var sceneHierarchyIsClean = EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
             if (sceneHierarchyIsClean)
             {
-                MergeActionContainers = StartProcess();
+                try
+                {
+                    MergeActionContainers = StartProcess();
+                }
+                catch
+                {
+                    Cleanup();
+                    throw;
+                }
             }
             else
             {
@@ -70,5 +78,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
 
         protected abstract void CancelProcess();
 
+        protected virtual void Cleanup()
+        {
+
+        }
     }
 }

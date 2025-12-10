@@ -103,7 +103,7 @@ namespace ThirteenPixels.OpenUnityMergeTool
             EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         }
 
-        private void Cleanup()
+        protected override void Cleanup()
         {
             AssetDatabase.DeleteAsset(FileUtility.AttachSuffix(path, theirsSuffix));
             EditorUtility.ClearProgressBar();
