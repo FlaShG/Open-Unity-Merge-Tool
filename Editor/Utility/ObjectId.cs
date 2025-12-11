@@ -76,7 +76,9 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 var index = component.GetComponentIndex();
                 var realGameObject = backupMapping(component.gameObject);
-                if (realGameObject != null)
+                // The real GO might have fewer components.
+                // This was discovered with a TMPro GO suddenly having a new MeshFilter after instantiation.
+                if (realGameObject != null && realGameObject.GetComponentCount() > index)
                 {
                     TryGetIds(realGameObject.GetComponentAtIndex(index), out id, out prefabId);
                 }
