@@ -88,17 +88,21 @@ namespace ThirteenPixels.OpenUnityMergeTool
                     // The real GO might have fewer components.
                     // This was discovered with a TMPro GO suddenly having a new MeshFilter after instantiation.
                     // In this case, the new component should be ignored during merge.
-                    var withinRange = index < realGameObject.GetComponentCount();
-                    if (withinRange && TryGetIds(realGameObject.GetComponentAtIndex(index), out id, out prefabId))
+                    if (index >= realGameObject.GetComponentCount())
                     {
-                        objectId = new ObjectId(type, id, prefabId);
-                        return true;
+                        objectId = default;
+                        return false;
+                    }
+                    if (!TryGetIds(realGameObject.GetComponentAtIndex(index), out id, out prefabId))
+                    {
+                        objectId = default;
+                        return false;
                     }
                 }
             }
 
-            objectId = default;
-            return false;
+            objectId = new ObjectId(type, id, prefabId);
+            return true;
         }
 
         public static ObjectId GetFor(UnityObject obj)
