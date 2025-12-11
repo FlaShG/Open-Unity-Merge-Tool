@@ -69,22 +69,36 @@ namespace ThirteenPixels.OpenUnityMergeTool
             return new ObjectId(typeof(GameObject), id, prefabId);
         }
 
-        public static ObjectId GetFor(Component component)
+        /// <summary>
+        /// Attempts to get the object id for the given <paramref name="component"/> or its registered backup.
+        /// </summary>
+        /// <returns
+        /// <c>true</c> when the component has a valid id or has a backup with a valid id,
+        /// <c>false</c> when it has no valid id, has no backup, or the component doesn't exist on the backup GameObject.
+        /// </returns>
+        public static bool TryGetForComponentOrBackup(Component component, out ObjectId objectId)
         {
             var type = component.GetType();
             if (!TryGetIds(component, out var id, out var prefabId) && backupMapping != null)
             {
                 var index = component.GetComponentIndex();
                 var realGameObject = backupMapping(component.gameObject);
-                // The real GO might have fewer components.
-                // This was discovered with a TMPro GO suddenly having a new MeshFilter after instantiation.
-                if (realGameObject != null && realGameObject.GetComponentCount() > index)
+                if (realGameObject != null)
                 {
+                    // The real GO might have fewer components.
+                    // This was discovered with a TMPro GO suddenly having a new MeshFilter after instantiation.
+                    // In this case, the new component should be ignored during merge.
+                    if (index >= realGameObject.GetComponentCount())
+                    {
+                        objectId = default;
+                        return false;
+                    }
                     TryGetIds(realGameObject.GetComponentAtIndex(index), out id, out prefabId);
                 }
             }
 
-            return new ObjectId(type, id, prefabId);
+            objectId = new ObjectId(type, id, prefabId);
+            return true;
         }
 
         public static ObjectId GetFor(UnityObject obj)

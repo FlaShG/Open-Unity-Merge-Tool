@@ -108,7 +108,10 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 if (component == null) continue;
 
-                theirComponents.Add(ObjectId.GetFor(component), component);
+                if (ObjectId.TryGetForComponentOrBackup(component, out var objectId))
+                {
+                    theirComponents.Add(objectId, component);
+                }
             }
 
             var ourComponents = ourGameObject.GetComponents<Component>();
@@ -117,17 +120,19 @@ namespace ThirteenPixels.OpenUnityMergeTool
             {
                 if (ourComponent == null) continue;
 
-                var id = ObjectId.GetFor(ourComponent);
-                if (theirComponents.TryGetValue(id, out var theirComponent))
+                if (ObjectId.TryGetForComponentOrBackup(ourComponent, out var objectId))
                 {
-                    // Component exists in both versions.
-                    FindPropertyDifferences(ourComponent, theirComponent);
-                    theirComponents.Remove(id);
-                }
-                else
-                {
-                    // Component only exists in our version.
-                    mergeActions.Add(new MergeActionOurComponent(ourGameObject, ourComponent));
+                    if (theirComponents.TryGetValue(objectId, out var theirComponent))
+                    {
+                        // Component exists in both versions.
+                        FindPropertyDifferences(ourComponent, theirComponent);
+                        theirComponents.Remove(objectId);
+                    }
+                    else
+                    {
+                        // Component only exists in our version.
+                        mergeActions.Add(new MergeActionOurComponent(ourGameObject, ourComponent));
+                    }
                 }
             }
 
